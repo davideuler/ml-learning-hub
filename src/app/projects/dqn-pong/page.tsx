@@ -55,6 +55,16 @@ export default function DQNPongPage() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">{STATS.map(([k, v]) => <div key={k} className="card text-center py-3"><div className="text-sm text-[var(--text-muted)]">{k}</div><div className="font-bold text-[var(--text-primary)] mt-1">{v}</div></div>)}</div>
 
+      <div className="card mb-8">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Project Background / 项目背景</h2>
+        <p className="text-sm text-[var(--text-muted)] leading-relaxed">DQN is one of the first deep reinforcement learning systems that clearly showed neural networks could learn control policies directly from pixels. Pong matters because it is simple enough to study but difficult enough to expose the instability of value learning. <br />DQN 是最早清楚证明“神经网络可以直接从像素学习控制策略”的深度强化学习系统之一。Pong 之所以重要，是因为它足够简单，适合研究；但又足够难，能真实暴露 value learning 的不稳定性。</p>
+      </div>
+
+      <div className="card mb-10">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Problem it solves / 它要解决什么问题</h2>
+        <p className="text-sm text-[var(--text-muted)] leading-relaxed">The problem is not just “play Pong.” The deeper problem is how to learn stable action values from high-dimensional visual input when rewards are delayed and each update changes the future target. DQN solves this with replay buffers, target networks, and convolutional Q estimation. <br />这个项目要解决的并不只是“玩 Pong”，更深层的问题是：当输入是高维图像、奖励是延迟到来的，而且每次更新都会改变未来目标时，如何稳定学出动作价值。DQN 给出的解法是 replay buffer、target network 和卷积式 Q 值估计。</p>
+      </div>
+
       <div className="card mb-10">
         <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn / 你会学到什么</h2>
         <ul className="text-sm space-y-2 text-[var(--text-muted)]">
@@ -86,6 +96,8 @@ export default function DQNPongPage() {
           <p><span className="font-semibold text-[var(--text-primary)]">The CNN is not the hard part / CNN 不是最难的部分：</span> most of the difficulty in DQN comes from unstable targets and correlated data, not from visual feature extraction itself. / DQN 真正的难点大多不在视觉特征提取，而在不稳定目标和强相关数据。</p>
           <p><span className="font-semibold text-[var(--text-primary)]">Replay changes the data distribution / replay 改变数据分布：</span> without replay, sequential observations are too correlated and SGD becomes extremely noisy. / 没有 replay，连续 observation 相关性太强，SGD 会非常不稳定。</p>
           <p><span className="font-semibold text-[var(--text-primary)]">Target networks slow down feedback loops / target network 减缓反馈回路：</span> bootstrapping on a network that is changing every step creates self-chasing dynamics. The target copy reduces that feedback loop. / 如果每一步都用快速变化的网络做 bootstrap，就会出现自我追逐。target copy 的存在就是为了减缓这个反馈回路。</p>
+          <p><span className="font-semibold text-[var(--text-primary)]">The training step is the real engine / 真正的核心在训练步：</span> sample a batch from replay, compute online Q-values, build the delayed target with the target network, and optimize TD error. If this path is wrong, the whole agent appears to learn but actually drifts. / 真正的引擎是训练步：从 replay 采样、计算 online Q 值、用 target network 构造延迟目标，再最小化 TD error。这个链条一旦写错，agent 看似在学，实际上会漂移。</p>
+          <p><span className="font-semibold text-[var(--text-primary)]">Evaluation must be separated from exploration / 评估必须与探索解耦：</span> if epsilon stays high during evaluation, you are mostly measuring noise rather than learned control. / 如果评估时 epsilon 仍然很高，你测到的基本只是噪声，而不是学到的控制能力。</p>
         </div>
       </div>
 
