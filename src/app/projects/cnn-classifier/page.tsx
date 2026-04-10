@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { FullCodeSample } from '@/components/projects/FullCodeSample';
 
 export const metadata: Metadata = {
   title: 'Project: CNN Image Classifier',
@@ -136,6 +137,8 @@ export default function CNNClassifierPage() {
           </div>
         </div>
       </div>
+
+      <FullCodeSample projectSlug="cnn-classifier" />
 
       <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Build Steps / 构建步骤</h2>
       <div className="space-y-4 mb-12">

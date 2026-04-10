@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { FullCodeSample } from '@/components/projects/FullCodeSample';
 
 export const metadata: Metadata = {
   title: 'Project: Mini-GPT',
@@ -206,6 +207,8 @@ class MiniGPT(nn.Module):
           </div>
         </div>
       </div>
+
+      <FullCodeSample projectSlug="mini-gpt" />
 
       <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">{COPY.en.stepsTitle} / {COPY.zh.stepsTitle}</h2>
       <div className="space-y-4 mb-12">

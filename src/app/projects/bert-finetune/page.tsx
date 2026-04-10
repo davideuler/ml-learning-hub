@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { FullCodeSample } from '@/components/projects/FullCodeSample';
 
 export const metadata: Metadata = { title: 'Project: BERT Sentiment Fine-tune' };
 
@@ -101,6 +102,8 @@ model = get_peft_model(model, peft_config)`}</pre>
           <p><span className="font-semibold text-[var(--text-primary)]">A fair benchmark needs identical scaffolding / 公平 benchmark 需要相同脚手架：</span> tokenizer, split logic, evaluation metric, and logging must stay aligned, or your conclusion about LoRA efficiency is mostly noise. / tokenizer、数据切分、评估指标和日志方式必须保持一致，否则你关于 LoRA 效率的结论大多只是噪声。</p>
         </div>
       </div>
+
+      <FullCodeSample projectSlug="bert-finetune" />
 
       <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Build Steps / 构建步骤</h2>
       <div className="space-y-4 mb-12">{STEPS.map((s, i) => <div key={i} className="card"><h3 className="font-semibold text-[var(--text-primary)]">{i + 1}. {s.title}</h3><p className="text-sm text-[var(--text-muted)] mt-1">{s.body}</p></div>)}</div>
