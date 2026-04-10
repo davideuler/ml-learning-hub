@@ -1,0 +1,24 @@
+---
+title: Mini-GPT (Shakespeare)
+description: Build a character-level GPT from scratch in PyTorch.
+level: Intermediate
+tags: [gpt, attention, transformers, nlp]
+date: "2024-01-15"
+---
+
+# Mini-GPT
+
+Build a character-level GPT and train it on Shakespeare's complete works.
+
+## Architecture
+
+The model uses **causal self-attention** with a triangular mask:
+
+$$\text{Attention}(Q, K, V) = \text{softmax}\!\left(\frac{QK^T}{\sqrt{d_k}}\right)\!V$$
+
+```python
+# Causal mask (no peeking at future tokens)
+mask = torch.tril(torch.ones(T, T))
+att  = att.masked_fill(mask == 0, float('-inf'))
+att  = F.softmax(att, dim=-1)
+```

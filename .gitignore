@@ -1,0 +1,24 @@
+# Next.js
+.next/
+out/
+build/
+
+# Deps
+node_modules/
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Vercel
+.vercel
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+*.swp
+*.swo

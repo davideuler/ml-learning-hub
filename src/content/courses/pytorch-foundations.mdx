@@ -1,0 +1,52 @@
+---
+title: PyTorch Foundations
+description: Learn PyTorch from tensors to full training pipelines.
+level: Beginner
+tags: [pytorch, tensors, autograd, training]
+date: "2024-01-01"
+---
+
+# PyTorch Foundations
+
+## Module 1: Tensor Fundamentals
+
+A **tensor** is the fundamental data structure in PyTorch — an N-dimensional array with
+automatic differentiation support.
+
+```python
+import torch
+
+# Create tensors
+x = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
+print(x.shape)   # torch.Size([2, 2])
+print(x.dtype)   # torch.float32
+
+# GPU transfer
+if torch.cuda.is_available():
+    x = x.cuda()
+    print(x.device)  # cuda:0
+```
+
+### Broadcasting
+
+PyTorch follows NumPy broadcasting semantics:
+
+```python
+a = torch.randn(3, 1)
+b = torch.randn(1, 4)
+c = a + b   # shape: (3, 4)
+```
+
+## Module 2: Autograd
+
+PyTorch builds a **dynamic computational graph** during the forward pass,
+then traverses it backwards to compute gradients.
+
+$$\frac{\partial L}{\partial w} = \frac{\partial L}{\partial \hat{y}} \cdot \frac{\partial \hat{y}}{\partial w}$$
+
+```python
+x = torch.tensor([2.0], requires_grad=True)
+y = x ** 2 + 3 * x + 1
+y.backward()
+print(x.grad)  # dy/dx = 2x + 3 = 7.0
+```
