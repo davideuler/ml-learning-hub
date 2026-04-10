@@ -4,14 +4,20 @@ import { notFound } from 'next/navigation';
 import { BilingualText } from '@/components/common/BilingualText';
 import { COURSE_MODULES, getModuleLesson } from '@/lib/courseModules';
 
+type RouteParams = {
+  courseSlug: string;
+  moduleSlug: string;
+};
+
 export function generateStaticParams() {
   return COURSE_MODULES.flatMap((course) =>
     course.modules.map((module) => ({ courseSlug: course.courseSlug, moduleSlug: module.slug }))
   );
 }
 
-export function generateMetadata({ params }: { params: { courseSlug: string; moduleSlug: string } }): Metadata {
-  const result = getModuleLesson(params.courseSlug, params.moduleSlug);
+export async function generateMetadata({ params }: { params: Promise<RouteParams> }): Promise<Metadata> {
+  const { courseSlug, moduleSlug } = await params;
+  const result = getModuleLesson(courseSlug, moduleSlug);
   if (!result) {
     return { title: 'Module Not Found' };
   }
@@ -22,8 +28,9 @@ export function generateMetadata({ params }: { params: { courseSlug: string; mod
   };
 }
 
-export default function CourseModulePage({ params }: { params: { courseSlug: string; moduleSlug: string } }) {
-  const result = getModuleLesson(params.courseSlug, params.moduleSlug);
+export default async function CourseModulePage({ params }: { params: Promise<RouteParams> }) {
+  const { courseSlug, moduleSlug } = await params;
+  const result = getModuleLesson(courseSlug, moduleSlug);
   if (!result) notFound();
 
   const { course, module } = result;
