@@ -4,65 +4,28 @@ import Link from 'next/link';
 export const metadata: Metadata = { title: 'Project: BERT Sentiment Fine-tune' };
 
 const STEPS = [
-  {
-    title: 'Prepare the dataset pipeline',
-    body: 'Load GLUE SST-2 with datasets, inspect class balance, tokenize with AutoTokenizer, and build a minimal error-analysis split before training.',
-  },
-  {
-    title: 'Baseline with Trainer',
-    body: 'Fine-tune bert-base-uncased end-to-end with Hugging Face Trainer. Track learning rate, warmup ratio, validation accuracy, and confusion cases.',
-  },
-  {
-    title: 'Parameter-efficient fine-tuning',
-    body: 'Add a LoRA branch and compare trainable parameter count, VRAM usage, training speed, and final validation accuracy.',
-  },
-  {
-    title: 'Evaluation and failure analysis',
-    body: 'Inspect false positives and false negatives, especially negation-heavy sentences and sarcastic expressions. Tie failure patterns back to training data.',
-  },
-  {
-    title: 'Packaging for inference',
-    body: 'Export a prediction script, batch inference function, and tiny FastAPI endpoint so the model becomes a reusable service, not just a notebook result.',
-  },
+  { title: 'Prepare the dataset pipeline / 数据准备', body: 'Load GLUE SST-2, tokenize with AutoTokenizer, inspect label balance, and prepare a clean train/validation split. / 加载 GLUE SST-2，用 AutoTokenizer 分词，检查标签分布，并准备干净的训练/验证集。' },
+  { title: 'Baseline with Trainer / 先做基线', body: 'Fine-tune bert-base-uncased with Hugging Face Trainer and record learning rate, loss, and validation accuracy. / 先用 Hugging Face Trainer 微调 bert-base-uncased，记录学习率、loss 和验证精度。' },
+  { title: 'Add LoRA / 加入 LoRA', body: 'Compare full fine-tuning with LoRA on trainable params, VRAM use, speed, and final accuracy. / 对比全量微调和 LoRA 在可训练参数、显存、速度和最终精度上的差异。' },
+  { title: 'Error analysis / 错误分析', body: 'Study false positives, negation-heavy sentences, and label ambiguity to understand where the model still fails. / 重点看 false positives、否定句和标签模糊样本，理解模型仍然失败的地方。' },
 ];
 
 const PITFALLS = [
-  {
-    title: 'Tokenization truncation hiding errors',
-    body: 'If you truncate blindly, long examples may lose the actual sentiment cue. Always inspect sequence length distribution before fixing max_length.',
-  },
-  {
-    title: 'Learning rate too high for full fine-tuning',
-    body: 'BERT-base is usually happiest in the 1e-5 to 5e-5 range. Using a CNN-style learning rate will destroy pre-trained representations fast.',
-  },
-  {
-    title: 'LoRA comparison without equal eval settings',
-    body: 'If full fine-tuning and LoRA runs use different seeds, batch sizes, or epoch counts, the comparison is noise, not evidence.',
-  },
-  {
-    title: 'Using accuracy alone on a tiny validation split',
-    body: 'For SST-2 accuracy is standard, but still inspect confusion cases and confidence calibration. A single number hides failure modes.',
-  },
-  {
-    title: 'Forgetting model.eval() during validation',
-    body: 'Dropout and layer norm behaviour make validation noisy if you keep the model in train mode. This mistake shows up more often than people admit.',
-  },
-  {
-    title: 'MPS / CUDA dtype mismatch in PEFT stacks',
-    body: 'When combining transformers, peft, and mixed precision, make sure adapter weights and base weights agree on dtype. Silent casting kills speed and sometimes stability.',
-  },
+  { title: 'Tokenization mismatch / 分词器不匹配', body: 'Using the wrong tokenizer or truncation rule silently damages accuracy. / 如果 tokenizer 或 truncation 规则不匹配，精度会静默下降。' },
+  { title: 'Treating LoRA as magic / 把 LoRA 当魔法', body: 'LoRA reduces trainable parameters, but bad rank or target modules still gives weak results. / LoRA 只是降参数量，rank 和 target module 选不好，效果一样会差。' },
+  { title: 'Ignoring class-specific failure / 忽略类别级失败', body: 'Average accuracy can look fine while the model still fails on negation or sarcastic examples. / 平均精度看着不错，但模型可能仍然在否定句或讽刺样本上持续失败。' },
 ];
 
-const HARDWARE_ROWS = [
-  { hw: 'Mac M4 Pro 128G', full_ft: '✅ Slow but viable', lora: '✅ Easy', multitask: '⚠️ Limited' },
-  { hw: 'RTX 4090', full_ft: '✅ Best default', lora: '✅ Excellent', multitask: '✅ Good' },
-  { hw: 'A100 80GB', full_ft: '✅ Excellent', lora: '✅ Overkill', multitask: '✅ Excellent' },
-  { hw: '8× L20', full_ft: '⚠️ Overkill for SST-2', lora: '⚠️ Overkill', multitask: '✅ Best for pipelines' },
+const REFERENCES = [
+  { label: 'BERT paper', href: 'https://arxiv.org/abs/1810.04805' },
+  { label: 'PEFT docs', href: 'https://huggingface.co/docs/peft/index' },
+  { label: 'Transformers Trainer docs', href: 'https://huggingface.co/docs/transformers/main_classes/trainer' },
+  { label: 'GLUE benchmark', href: 'https://gluebenchmark.com/' },
 ];
 
-export default function BERTFinetunePage() {
+export default function BertFinetunePage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
       <nav className="text-sm text-[var(--text-muted)] mb-8">
         <Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link>
         <span className="mx-2">/</span>
@@ -70,171 +33,60 @@ export default function BERTFinetunePage() {
       </nav>
 
       <div className="flex items-start gap-4 mb-4">
-        <span className="text-5xl">🔍</span>
+        <span className="text-5xl">📝</span>
         <div>
-          <div className="flex gap-2 mb-2">
-            <span className="badge badge-purple">Transformers</span>
-            <span className="badge badge-blue">Intermediate</span>
-          </div>
-          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">BERT Sentiment Fine-tune</h1>
+          <div className="flex gap-2 mb-2"><span className="badge badge-blue">NLP</span><span className="badge badge-green">Intermediate</span></div>
+          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">BERT Sentiment Fine-tune / BERT 情感分类微调</h1>
         </div>
       </div>
 
-      <p className="text-[var(--text-muted)] mb-8">
-        Fine-tune <code className="text-brand-300">bert-base-uncased</code> on SST-2 sentiment classification
-        using Hugging Face Trainer. Includes a LoRA adapter branch so you can compare full fine-tuning
-        against parameter-efficient fine-tuning under different hardware budgets.
-      </p>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
-        {[
-          { k: 'Dataset', v: 'GLUE SST-2' },
-          { k: 'Target', v: '94%+ acc' },
-          { k: 'Time', v: '2–4 hrs' },
-          { k: 'Hardware', v: 'M4 / 4090' },
-        ].map(({ k, v }) => (
-          <div key={k} className="card text-center py-3">
-            <div className="text-sm text-[var(--text-muted)]">{k}</div>
-            <div className="font-bold text-[var(--text-primary)] mt-1">{v}</div>
-          </div>
-        ))}
-      </div>
+      <p className="text-[var(--text-muted)] mb-8">Train a sentiment classifier with BERT, then compare full fine-tuning against LoRA so you understand where PEFT saves memory and where it trades away flexibility. <br />用 BERT 训练情感分类器，并对比全量微调和 LoRA，真正理解 PEFT 在节省显存的同时牺牲了什么、保留了什么。</p>
 
       <div className="card mb-10">
-        <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn</h2>
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn / 你会学到什么</h2>
         <ul className="text-sm space-y-2 text-[var(--text-muted)]">
-          <li>▸ The difference between using a pre-trained encoder and training from scratch</li>
-          <li>▸ How classification heads sit on top of [CLS] representations</li>
-          <li>▸ How LoRA changes trainable parameter count, VRAM budget, and iteration speed</li>
-          <li>▸ How to evaluate NLP models beyond a single validation accuracy number</li>
-          <li>▸ How to package a fine-tuned transformer into a callable service</li>
+          <li>▸ Transformer fine-tuning workflow / Transformer 微调完整流程</li>
+          <li>▸ LoRA and PEFT tradeoffs / LoRA 与 PEFT 的核心权衡</li>
+          <li>▸ Hugging Face Trainer usage / Hugging Face Trainer 实战</li>
+          <li>▸ Error analysis for NLP classification / NLP 分类任务错误分析</li>
         </ul>
       </div>
 
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code: Trainer + LoRA Scaffold</h2>
-      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-[var(--code-bg)] border border-[var(--border)]">{`from datasets import load_dataset
-from transformers import (
-    AutoTokenizer,
-    AutoModelForSequenceClassification,
-    DataCollatorWithPadding,
-    TrainingArguments,
-    Trainer,
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code / 起始代码</h2>
+      <pre className="text-xs leading-relaxed overflow-x-auto mb-8 rounded-xl p-4">{`from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from peft import LoraConfig, get_peft_model
+
+model = AutoModelForSequenceClassification.from_pretrained(
+    "bert-base-uncased", num_labels=2
 )
+peft_config = LoraConfig(r=8, lora_alpha=16, target_modules=["query", "value"])
+model = get_peft_model(model, peft_config)`}</pre>
 
-MODEL_NAME = "bert-base-uncased"
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
-raw = load_dataset("glue", "sst2")
+      <div className="card mb-10">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Code walkthrough / 代码要点解释</h2>
+        <div className="space-y-4 text-sm text-[var(--text-muted)]">
+          <p><span className="font-semibold text-[var(--text-primary)]">Classification head matters / 分类头很关键：</span> the pretrained encoder is general-purpose, but task performance depends on how the classification head and training objective are wired. / 预训练 encoder 是通用表征器，但最终任务表现很依赖分类头和训练目标的连接方式。</p>
+          <p><span className="font-semibold text-[var(--text-primary)]">LoRA changes update scope / LoRA 改变更新范围：</span> only low-rank adapters are trained, so memory drops a lot, but adaptation capacity also becomes more constrained. / LoRA 只训练低秩 adapter，所以显存占用会明显下降，但适应能力也更受约束。</p>
+          <p><span className="font-semibold text-[var(--text-primary)]">Error analysis beats raw accuracy / 错误分析比只看精度更重要：</span> if the model fails consistently on negation, the architecture may be fine but the training setup still needs work. / 如果模型在否定句上持续失败，架构不一定有问题，训练设置才是重点。 </p>
+        </div>
+      </div>
 
-def preprocess(batch):
-    return tokenizer(batch["sentence"], truncation=True, max_length=128)
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Build Steps / 构建步骤</h2>
+      <div className="space-y-4 mb-12">{STEPS.map((s, i) => <div key={i} className="card"><h3 className="font-semibold text-[var(--text-primary)]">{i + 1}. {s.title}</h3><p className="text-sm text-[var(--text-muted)] mt-1">{s.body}</p></div>)}</div>
 
-encoded = raw.map(preprocess, batched=True)
-collator = DataCollatorWithPadding(tokenizer=tokenizer)
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Common Pitfalls / 常见坑</h2>
+      <div className="space-y-3 mb-12">{PITFALLS.map((p) => <div key={p.title} className="card border-yellow-500/20"><p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p><p className="text-xs text-[var(--text-muted)]">{p.body}</p></div>)}</div>
 
-model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=2)
-
-# TODO: add a PEFT LoRA branch here for comparison
-# from peft import LoraConfig, get_peft_model
-# peft_cfg = LoraConfig(r=8, lora_alpha=16, target_modules=[...])
-# model = get_peft_model(model, peft_cfg)
-
-args = TrainingArguments(
-    output_dir="runs/bert-sst2",
-    learning_rate=2e-5,
-    per_device_train_batch_size=32,
-    per_device_eval_batch_size=64,
-    num_train_epochs=3,
-    weight_decay=0.01,
-    evaluation_strategy="epoch",
-    save_strategy="epoch",
-    load_best_model_at_end=True,
-    report_to=["tensorboard"],
-)
-
-def compute_metrics(eval_pred):
-    logits, labels = eval_pred
-    preds = logits.argmax(-1)
-    acc = (preds == labels).mean()
-    return {"accuracy": float(acc)}
-
-trainer = Trainer(
-    model=model,
-    args=args,
-    train_dataset=encoded["train"],
-    eval_dataset=encoded["validation"],
-    tokenizer=tokenizer,
-    data_collator=collator,
-    compute_metrics=compute_metrics,
-)
-
-trainer.train()`}</pre>
-
-      <div className="card">
-        <h2 className="font-bold text-[var(--text-primary)] mb-3">Key Concepts</h2>
+      <div className="card mb-10">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria / 完成标准</h2>
         <ul className="text-sm space-y-2 text-[var(--text-muted)]">
-          <li>▸ Tokenization with AutoTokenizer</li>
-          <li>▸ Classification head on [CLS] token</li>
-          <li>▸ Differential LR (lower for pre-trained layers)</li>
-          <li>▸ LoRA adapters (rank=8) — 0.1% trainable params</li>
-          <li>▸ Evaluation on GLUE SST-2 benchmark</li>
+          <li>✅ Full fine-tuning and LoRA are both runnable / 全量微调和 LoRA 两条路径都能跑通</li>
+          <li>✅ VRAM and parameter-count comparison is explicit / 显存和参数量对比明确</li>
+          <li>✅ Validation errors are analyzed, not just scored / 不只是打分，还做了验证错误分析</li>
         </ul>
       </div>
-      <div className="space-y-4 mt-8">
-        {STEPS.map((step, idx) => (
-          <div key={step.title} className="card flex gap-4">
-            <span className="text-2xl font-extrabold text-purple-400/40 font-mono w-8 shrink-0">{idx + 1}</span>
-            <div>
-              <h3 className="font-semibold text-[var(--text-primary)]">{step.title}</h3>
-              <p className="text-sm text-[var(--text-muted)] mt-1">{step.body}</p>
-            </div>
-          </div>
-        ))}
-      </div>
 
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 mt-12">Common Pitfalls</h2>
-      <div className="space-y-3 mb-12">
-        {PITFALLS.map((p) => (
-          <div key={p.title} className="card border-yellow-500/20">
-            <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
-            <p className="text-xs text-[var(--text-muted)]">{p.body}</p>
-          </div>
-        ))}
-      </div>
-
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Hardware Comparison</h2>
-      <div className="overflow-x-auto mb-10">
-        <table className="w-full text-xs text-[var(--text-muted)] border-collapse">
-          <thead>
-            <tr className="border-b border-[var(--border)]">
-              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Hardware</th>
-              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Full fine-tune</th>
-              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">LoRA run</th>
-              <th className="text-left py-2 text-[var(--text-primary)] font-semibold">Multi-task experiments</th>
-            </tr>
-          </thead>
-          <tbody>
-            {HARDWARE_ROWS.map((r) => (
-              <tr key={r.hw} className="border-b border-[var(--border)]">
-                <td className="py-2 pr-4 text-[var(--text-primary)] font-medium">{r.hw}</td>
-                <td className="py-2 pr-4">{r.full_ft}</td>
-                <td className="py-2 pr-4">{r.lora}</td>
-                <td className="py-2">{r.multitask}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="card">
-        <h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria</h2>
-        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
-          <li>✅ Validation accuracy ≥ 93% with a reproducible seed and config</li>
-          <li>✅ Full fine-tune and LoRA runs are compared under matched settings</li>
-          <li>✅ At least 20 failure cases are manually reviewed and categorized</li>
-          <li>✅ Best model is exported with tokenizer and inference script</li>
-          <li>⭐ Stretch: Compare BERT against DistilBERT on speed vs accuracy</li>
-          <li>⭐ Stretch: Add confidence calibration or temperature scaling</li>
-        </ul>
-      </div>
+      <div className="card"><h2 className="font-bold text-[var(--text-primary)] mb-3">References / 参考资料</h2><ul className="space-y-2 text-sm">{REFERENCES.map((r) => <li key={r.href}><a href={r.href} target="_blank" rel="noreferrer" className="text-brand-300 hover:text-brand-200">{r.label}</a></li>)}</ul></div>
     </div>
   );
 }

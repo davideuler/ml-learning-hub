@@ -7,69 +7,29 @@ export const metadata: Metadata = {
 };
 
 const STEPS = [
-  {
-    title: 'Data Pipeline',
-    body: 'torchvision.datasets.CIFAR10 with DataLoader workers. Augment train set with RandomCrop(32, padding=4), RandomHorizontalFlip, and Normalize with CIFAR-10 channel stats. Visualise a batch to verify augmentations before training.',
-  },
-  {
-    title: 'Build the Model',
-    body: 'Stack ResBlocks: 3→64→128→256→512 channels with stride-2 downsampling between stages. Add global average pooling after the last stage, followed by a linear classification head. Print parameter count.',
-  },
-  {
-    title: 'Training Loop',
-    body: 'AdamW optimizer (weight_decay=5e-4), OneCycleLR scheduler over all epochs, mixed precision with torch.amp.autocast, gradient clipping at max_norm=1.0. Save best checkpoint by validation accuracy.',
-  },
-  {
-    title: 'Evaluation',
-    body: 'Top-1 accuracy on the held-out test set. Build a confusion matrix with sklearn, identify the two most-confused class pairs, and check per-class precision/recall.',
-  },
-  {
-    title: 'Logging',
-    body: 'TensorBoard: loss and accuracy curves (train/val), LR schedule curve, a grid of sample images with predicted vs true labels, and first-layer filter visualisation.',
-  },
-  {
-    title: 'Export',
-    body: 'Save the best checkpoint with optimizer state. Export to TorchScript with torch.jit.script, run a parity check comparing 100 random inputs against the PyTorch model output.',
-  },
-];
+  { title: { en: 'Data Pipeline', zh: '数据管线' }, body: { en: 'Use CIFAR-10 with train augmentation, normalization, and batch visualization before training.', zh: '使用 CIFAR-10，并在训练前完成数据增强、归一化和 batch 可视化检查。' } },
+  { title: { en: 'Build the Model', zh: '构建模型' }, body: { en: 'Stack ResBlocks with downsampling stages and a final classifier head.', zh: '堆叠带下采样阶段的 ResBlock，并接上最终分类头。' } },
+  { title: { en: 'Training Loop', zh: '训练循环' }, body: { en: 'Train with AdamW, OneCycleLR, mixed precision, and gradient clipping.', zh: '使用 AdamW、OneCycleLR、混合精度和梯度裁剪进行训练。' } },
+  { title: { en: 'Evaluation', zh: '评估' }, body: { en: 'Track top-1 accuracy, confusion matrix, and per-class failure cases.', zh: '跟踪 top-1 accuracy、confusion matrix 和类别级失败案例。' } },
+  { title: { en: 'Logging and Export', zh: '日志与导出' }, body: { en: 'Use TensorBoard and export the trained model to TorchScript.', zh: '使用 TensorBoard，并把训练好的模型导出到 TorchScript。' } },
+] as const;
 
 const PITFALLS = [
-  {
-    title: 'Forgetting to normalise inputs',
-    body: 'CIFAR-10 stats are not [0,1] mean/std. Use mean=(0.4914, 0.4822, 0.4465) and std=(0.2470, 0.2435, 0.2616). Training without correct normalisation will converge 5–10% below optimal accuracy.',
-  },
-  {
-    title: 'BatchNorm before the shortcut add',
-    body: 'Common ResBlock mistakes include applying BN after the add or skipping BN on the projection shortcut. Either breaks the skip connection\'s identity initialisation property and slows convergence.',
-  },
-  {
-    title: 'OneCycleLR with wrong total_steps',
-    body: 'OneCycleLR requires total_steps = epochs × steps_per_epoch. If you pass epochs instead of steps, the LR schedule completes in 1/steps_per_epoch of the intended time, effectively killing the warmup.',
-  },
-  {
-    title: 'DataLoader workers on Windows / fork',
-    body: 'Setting num_workers > 0 on Windows or inside a Jupyter notebook without if __name__ == "__main__" guard will deadlock. Wrap your training entry point correctly.',
-  },
-  {
-    title: 'Mixed precision on MPS',
-    body: 'torch.amp.autocast("mps") is available from PyTorch 2.3+ but bfloat16 support on MPS is incomplete. Fall back to fp32 or test explicitly; silent dtype mismatches produce NaN losses on MPS.',
-  },
-  {
-    title: 'Training set leak into normalisation stats',
-    body: 'Compute normalisation statistics from the training split only. Using full-dataset stats is a subtle data leak that inflates benchmark numbers and will not reproduce on new data.',
-  },
-];
+  { title: { en: 'Wrong normalization stats', zh: '归一化统计值错误' }, body: { en: 'Incorrect CIFAR-10 mean/std silently lowers final accuracy.', zh: '如果 CIFAR-10 的 mean/std 用错，最终精度会静默下降。' } },
+  { title: { en: 'Broken residual shortcut', zh: '残差 shortcut 写坏' }, body: { en: 'A wrong projection shortcut breaks optimization and slows convergence badly.', zh: '如果 projection shortcut 写错，会显著破坏优化稳定性。' } },
+  { title: { en: 'Scheduler timing mismatch', zh: '调度器步进时机不对' }, body: { en: 'OneCycleLR must match total training steps, not just epoch count.', zh: 'OneCycleLR 需要匹配总 step 数，而不是只看 epoch 数。' } },
+] as const;
 
-const HARDWARE_ROWS = [
-  { hw: 'MacBook M4 Pro (14-core)', cifar10: '✅ ~15 min (fp32 MPS)', aug_sweep: '⚠️ Slow (>2 hrs)', multi_seed: '❌ Not practical' },
-  { hw: 'RTX 4090',                 cifar10: '✅ <5 min (amp)',        aug_sweep: '✅ ~30 min',        multi_seed: '✅ Good for 5 seeds' },
-  { hw: 'A100 80GB',                cifar10: '✅ <3 min',             aug_sweep: '✅ <20 min',        multi_seed: '✅ Comfortable' },
-  { hw: '8× L20',                   cifar10: '✅ Overkill (<2 min)',  aug_sweep: '✅ Best',           multi_seed: '✅ Best for large sweeps' },
+const REFERENCES = [
+  { label: 'Deep Residual Learning for Image Recognition', href: 'https://arxiv.org/abs/1512.03385' },
+  { label: 'PyTorch CIFAR tutorial', href: 'https://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html' },
+  { label: 'TorchVision docs', href: 'https://pytorch.org/vision/stable/index.html' },
+  { label: 'TensorBoard with PyTorch', href: 'https://pytorch.org/tutorials/intermediate/tensorboard_tutorial.html' },
 ];
 
 export default function CNNClassifierPage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
       <nav className="text-sm text-[var(--text-muted)] mb-8">
         <Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link>
         <span className="mx-2">/</span>
@@ -83,23 +43,22 @@ export default function CNNClassifierPage() {
             <span className="badge badge-blue">PyTorch</span>
             <span className="badge badge-green">Beginner</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">CNN Image Classifier</h1>
+          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">CNN Image Classifier / CNN 图像分类器</h1>
         </div>
       </div>
 
       <p className="text-[var(--text-muted)] mb-8">
-        Build a ResNet-18-style convolutional neural network entirely from scratch.
-        Train it on CIFAR-10, track metrics with TensorBoard, and target &gt;90% validation accuracy.
-        This is the canonical PyTorch project that verifies you understand every moving part.
+        Build a ResNet-style convolutional image classifier on CIFAR-10, then evaluate, export, and understand the full training workflow end to end.<br />
+        在 CIFAR-10 上构建一个 ResNet 风格卷积分类器，并完成评估、导出和端到端训练流程理解。
       </p>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
         {[
-          { k: 'Dataset',    v: 'CIFAR-10' },
-          { k: 'Classes',    v: '10' },
-          { k: 'Target',     v: '>90% acc' },
-          { k: 'Train time', v: '~15 min' },
-        ].map(({ k, v }) => (
+          ['Dataset / 数据集', 'CIFAR-10'],
+          ['Classes / 类别数', '10'],
+          ['Target / 目标', '>90% acc'],
+          ['Train time / 训练时间', '~15 min'],
+        ].map(([k, v]) => (
           <div key={k} className="card text-center py-3">
             <div className="text-sm text-[var(--text-muted)]">{k}</div>
             <div className="font-bold text-[var(--text-primary)] mt-1">{v}</div>
@@ -108,32 +67,23 @@ export default function CNNClassifierPage() {
       </div>
 
       <div className="card mb-10">
-        <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn</h2>
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn / 你会学到什么</h2>
         <ul className="text-sm space-y-2 text-[var(--text-muted)]">
-          <li>▸ How residual connections solve the vanishing gradient problem at depth</li>
-          <li>▸ Data augmentation strategies and their effect on generalisation</li>
-          <li>▸ Mixed-precision training with torch.amp and when it helps vs. hurts</li>
-          <li>▸ How to export a model to TorchScript for production deployment</li>
-          <li>▸ Reading confusion matrices to diagnose class-level failure modes</li>
+          <li>▸ Residual connections and why they help deep CNN optimization / 残差连接为何能帮助深层 CNN 优化</li>
+          <li>▸ Data augmentation and its effect on generalization / 数据增强如何影响泛化能力</li>
+          <li>▸ Mixed precision and practical PyTorch training patterns / 混合精度与实用 PyTorch 训练模式</li>
+          <li>▸ Confusion-matrix based error analysis / 基于 confusion matrix 的错误分析</li>
+          <li>▸ Model export and deployment readiness / 模型导出与部署准备</li>
         </ul>
       </div>
 
-      {/* Starter Code */}
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code: ResBlock &amp; Training Scaffold</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code / 起始代码</h2>
       <p className="text-sm text-[var(--text-muted)] mb-4">
-        The ResBlock below is complete. Your job: implement <code className="text-brand-300">ResNet</code>,
-        wire up the DataLoaders with augmentation, write the training loop, and add logging.
+        The code below gives you the training scaffold. The most important thing is to understand why the residual block, optimizer, scheduler, and data transforms have to line up correctly.<br />
+        下面这段代码给出训练骨架。真正关键的是理解为什么残差块、优化器、调度器和数据变换必须彼此配合正确。
       </p>
-      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-[var(--code-bg)] border border-[var(--border)]">{`import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch.utils.data import DataLoader
-from torchvision import datasets, transforms
-
-# ── ResBlock (complete — do not modify) ───────────────────────────────────────
-class ResBlock(nn.Module):
-    """Basic residual block with optional downsampling."""
-    def __init__(self, in_ch: int, out_ch: int, stride: int = 1):
+      <pre className="text-xs leading-relaxed overflow-x-auto mb-8 rounded-xl p-4">{`class ResBlock(nn.Module):
+    def __init__(self, in_ch, out_ch, stride=1):
         super().__init__()
         self.conv = nn.Sequential(
             nn.Conv2d(in_ch, out_ch, 3, stride=stride, padding=1, bias=False),
@@ -142,158 +92,72 @@ class ResBlock(nn.Module):
             nn.Conv2d(out_ch, out_ch, 3, padding=1, bias=False),
             nn.BatchNorm2d(out_ch),
         )
-        self.shortcut = (
-            nn.Sequential(
-                nn.Conv2d(in_ch, out_ch, 1, stride=stride, bias=False),
-                nn.BatchNorm2d(out_ch),
-            ) if stride != 1 or in_ch != out_ch else nn.Identity()
+        self.shortcut = nn.Identity() if stride == 1 and in_ch == out_ch else nn.Sequential(
+            nn.Conv2d(in_ch, out_ch, 1, stride=stride, bias=False),
+            nn.BatchNorm2d(out_ch),
         )
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, x):
-        return self.relu(self.conv(x) + self.shortcut(x))
+        return self.relu(self.conv(x) + self.shortcut(x))`}</pre>
 
+      <div className="card mb-10">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Code walkthrough / 代码要点解释</h2>
+        <div className="space-y-4 text-sm text-[var(--text-muted)]">
+          <div>
+            <p className="font-semibold text-[var(--text-primary)]">Residual path is not decoration / 残差路径不是装饰</p>
+            <p>The shortcut path keeps gradient flow alive through deeper stacks. Without it, optimization gets much harder as depth increases.<br />shortcut 路径会让梯度在更深网络中仍然保持流动，没有它，深层优化会明显更难。</p>
+          </div>
+          <div>
+            <p className="font-semibold text-[var(--text-primary)]">Normalization and augmentation define the training regime / 归一化和增强决定训练制度</p>
+            <p>Many bad runs are not architecture failures, they are data pipeline failures. CIFAR-10 normalization and augmentation choices directly affect convergence.<br />很多失败训练不是架构失败，而是数据管线失败。CIFAR-10 的归一化和增强策略会直接影响收敛效果。</p>
+          </div>
+          <div>
+            <p className="font-semibold text-[var(--text-primary)]">Scheduler timing matters / 调度器时机非常关键</p>
+            <p>OneCycleLR only works as intended if total steps match the actual training loop. Otherwise the learning-rate curve collapses too early.<br />只有当 OneCycleLR 的总 step 数与真实训练循环对齐时，它才会按设计工作，否则学习率曲线会过早崩塌。</p>
+          </div>
+        </div>
+      </div>
 
-# ── ResNet Model (TODO: implement) ────────────────────────────────────────────
-class ResNet(nn.Module):
-    """Small ResNet for CIFAR-10 (32×32 input)."""
-    def __init__(self, num_classes: int = 10):
-        super().__init__()
-        # TODO: stem: Conv2d(3, 64, 3, padding=1) + BN + ReLU (no maxpool for 32×32)
-        # TODO: stage1: 2× ResBlock(64, 64)
-        # TODO: stage2: ResBlock(64, 128, stride=2) + ResBlock(128, 128)
-        # TODO: stage3: ResBlock(128, 256, stride=2) + ResBlock(256, 256)
-        # TODO: stage4: ResBlock(256, 512, stride=2) + ResBlock(512, 512)
-        # TODO: global avg pool + Linear(512, num_classes)
-        raise NotImplementedError
-
-    def forward(self, x):
-        raise NotImplementedError
-
-
-# ── Data (TODO: fill augmentation + normalisation) ────────────────────────────
-CIFAR10_MEAN = (0.4914, 0.4822, 0.4465)
-CIFAR10_STD  = (0.2470, 0.2435, 0.2616)
-
-train_transform = transforms.Compose([
-    # TODO: RandomCrop(32, padding=4)
-    # TODO: RandomHorizontalFlip()
-    transforms.ToTensor(),
-    transforms.Normalize(CIFAR10_MEAN, CIFAR10_STD),
-])
-test_transform = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize(CIFAR10_MEAN, CIFAR10_STD),
-])
-
-train_ds = datasets.CIFAR10("data", train=True,  download=True, transform=train_transform)
-test_ds  = datasets.CIFAR10("data", train=False, download=True, transform=test_transform)
-train_loader = DataLoader(train_ds, batch_size=128, shuffle=True,  num_workers=4, pin_memory=True)
-test_loader  = DataLoader(test_ds,  batch_size=256, shuffle=False, num_workers=4, pin_memory=True)
-
-
-# ── Training Loop (TODO: implement) ──────────────────────────────────────────
-EPOCHS    = 100
-DEVICE    = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
-model     = ResNet().to(DEVICE)
-optimizer = torch.optim.AdamW(model.parameters(), lr=1e-3, weight_decay=5e-4)
-scheduler = torch.optim.lr_scheduler.OneCycleLR(
-    optimizer, max_lr=0.1,
-    epochs=EPOCHS, steps_per_epoch=len(train_loader),
-)
-scaler = torch.amp.GradScaler(DEVICE)
-
-def train_one_epoch(epoch: int) -> float:
-    model.train()
-    total_loss = 0.0
-    for imgs, labels in train_loader:
-        imgs, labels = imgs.to(DEVICE), labels.to(DEVICE)
-        optimizer.zero_grad()
-        with torch.amp.autocast(DEVICE):
-            # TODO: forward pass + cross-entropy loss
-            loss = ...  # type: ignore
-        scaler.scale(loss).backward()
-        scaler.unscale_(optimizer)
-        nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
-        scaler.step(optimizer)
-        scaler.update()
-        scheduler.step()
-        total_loss += loss.item()
-    return total_loss / len(train_loader)
-
-
-@torch.no_grad()
-def evaluate() -> float:
-    model.eval()
-    correct = total = 0
-    for imgs, labels in test_loader:
-        imgs, labels = imgs.to(DEVICE), labels.to(DEVICE)
-        preds = model(imgs).argmax(1)
-        correct += (preds == labels).sum().item()
-        total   += labels.size(0)
-    return correct / total
-`}</pre>
-
-      {/* Build Steps */}
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Build Steps</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Build Steps / 构建步骤</h2>
       <div className="space-y-4 mb-12">
         {STEPS.map((step, idx) => (
-          <div key={step.title} className="card flex gap-4">
+          <div key={step.title.en} className="card flex gap-4">
             <span className="text-2xl font-extrabold text-brand-400/40 font-mono w-8 shrink-0">{idx + 1}</span>
             <div>
-              <h3 className="font-semibold text-[var(--text-primary)]">{step.title}</h3>
-              <p className="text-sm text-[var(--text-muted)] mt-1">{step.body}</p>
+              <h3 className="font-semibold text-[var(--text-primary)]">{step.title.en} / {step.title.zh}</h3>
+              <p className="text-sm text-[var(--text-muted)] mt-1">{step.body.en}<br />{step.body.zh}</p>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Pitfalls */}
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Common Pitfalls</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Common Pitfalls / 常见坑</h2>
       <div className="space-y-3 mb-12">
         {PITFALLS.map((p) => (
-          <div key={p.title} className="card border-yellow-500/20">
-            <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
-            <p className="text-xs text-[var(--text-muted)]">{p.body}</p>
+          <div key={p.title.en} className="card border-yellow-500/20">
+            <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title.en} / {p.title.zh}</p>
+            <p className="text-xs text-[var(--text-muted)]">{p.body.en}<br />{p.body.zh}</p>
           </div>
         ))}
       </div>
 
-      {/* Hardware Table */}
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Hardware Comparison</h2>
-      <div className="overflow-x-auto mb-10">
-        <table className="w-full text-xs text-[var(--text-muted)] border-collapse">
-          <thead>
-            <tr className="border-b border-[var(--border)]">
-              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Hardware</th>
-              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">CIFAR-10 (1 run)</th>
-              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Augmentation sweep</th>
-              <th className="text-left py-2 text-[var(--text-primary)] font-semibold">Multi-seed (5×)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {HARDWARE_ROWS.map((r) => (
-              <tr key={r.hw} className="border-b border-[var(--border)]">
-                <td className="py-2 pr-4 text-[var(--text-primary)] font-medium">{r.hw}</td>
-                <td className="py-2 pr-4">{r.cifar10}</td>
-                <td className="py-2 pr-4">{r.aug_sweep}</td>
-                <td className="py-2">{r.multi_seed}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="card mb-10">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria / 完成标准</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
+          <li>✅ Validation accuracy reaches a strong baseline / 验证集准确率达到可靠 baseline</li>
+          <li>✅ Confusion matrix and class-level errors are analyzed / 完成 confusion matrix 和类别级错误分析</li>
+          <li>✅ TensorBoard logs are complete / TensorBoard 日志完整</li>
+          <li>✅ Exported model passes inference sanity check / 导出模型通过推理检查</li>
+        </ul>
       </div>
 
-      {/* Success Criteria */}
       <div className="card">
-        <h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria</h2>
-        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
-          <li>✅ Trains to convergence without NaN or divergence</li>
-          <li>✅ Validation accuracy ≥ 88% (passes), ≥ 91% (excellent)</li>
-          <li>✅ TensorBoard shows loss + accuracy curves for both splits</li>
-          <li>✅ TorchScript export passes parity check on 100 random inputs</li>
-          <li>⭐ Stretch: Beat the ResNet-18 baseline with a custom architecture change</li>
-          <li>⭐ Stretch: Add test-time augmentation (TTA) for +0.5% accuracy</li>
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">References / 参考资料</h2>
+        <ul className="space-y-2 text-sm">
+          {REFERENCES.map((ref) => (
+            <li key={ref.href}><a href={ref.href} target="_blank" rel="noreferrer" className="text-brand-300 hover:text-brand-200">{ref.label}</a></li>
+          ))}
         </ul>
       </div>
     </div>

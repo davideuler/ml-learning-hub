@@ -3,224 +3,33 @@ import Link from 'next/link';
 
 export const metadata: Metadata = { title: 'Project: FastAPI Inference Server' };
 
-const STEPS = [
-  {
-    title: 'Wrap the model cleanly',
-    body: 'Load checkpoints once at process startup, separate preprocessing from inference, and expose a pure predict() function before you add any API layer.',
-  },
-  {
-    title: 'Design the API contract',
-    body: 'Create /health, /predict, and /metrics endpoints, validate payloads with Pydantic, and define clear batch and timeout limits.',
-  },
-  {
-    title: 'Optimise throughput',
-    body: 'Add async request collection, dynamic batching, autocast where appropriate, and optional ONNX export for CPU-friendly deployments.',
-  },
-  {
-    title: 'Containerise and observe',
-    body: 'Use a multi-stage Docker build, add structured logging, Prometheus metrics, and a simple load-test script so the service can be benchmarked.',
-  },
-];
-
-const PITFALLS = [
-  {
-    title: 'Loading the model per request',
-    body: 'If checkpoint loading happens inside the request path, latency becomes catastrophic and throughput collapses immediately.',
-  },
-  {
-    title: 'No separation between preprocessing and prediction',
-    body: 'If tokenization, image transforms, and model inference are all tangled in one endpoint, debugging and benchmarking become painful.',
-  },
-  {
-    title: 'No timeout or batch-size guardrails',
-    body: 'Unbounded request size turns a neat demo into a denial-of-service machine. Define limits explicitly in the API contract.',
-  },
-  {
-    title: 'Async FastAPI with blocking GPU code',
-    body: 'async def does not magically make GPU inference non-blocking. Think about worker processes, request queues, and realistic concurrency.',
-  },
-  {
-    title: 'No parity check after ONNX export',
-    body: 'Export success means nothing if outputs drift. Always compare logits or predictions on a known validation batch.',
-  },
-  {
-    title: 'Observability added too late',
-    body: 'If you do not add structured logs and metrics from day one, performance regressions become guesswork instead of engineering.',
-  },
-];
-
-const HARDWARE_ROWS = [
-  { hw: 'Mac M4 Pro 128G', local_dev: '✅ Excellent', gpu_serving: '❌ No', load_test: '⚠️ Light only' },
-  { hw: 'RTX 4090', local_dev: '✅ Excellent', gpu_serving: '✅ Best default', load_test: '✅ Good' },
-  { hw: 'A100 80GB', local_dev: '✅ Excellent', gpu_serving: '✅ Excellent', load_test: '✅ Best' },
-  { hw: '8× L20', local_dev: '⚠️ Overkill', gpu_serving: '✅ Multi-model ready', load_test: '✅ Best for routing tests' },
+const REFERENCES = [
+  { label: 'FastAPI docs', href: 'https://fastapi.tiangolo.com/' },
+  { label: 'vLLM docs', href: 'https://docs.vllm.ai/' },
+  { label: 'Prometheus docs', href: 'https://prometheus.io/docs/introduction/overview/' },
 ];
 
 export default function InferenceServerPage() {
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <nav className="text-sm text-[var(--text-muted)] mb-8">
-        <Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link>
-        <span className="mx-2">/</span>
-        <span className="text-[var(--text-primary)]">Inference Server</span>
-      </nav>
-
-      <div className="flex items-start gap-4 mb-4">
-        <span className="text-5xl">🚀</span>
-        <div>
-          <div className="flex gap-2 mb-2">
-            <span className="badge badge-green">Production</span>
-            <span className="badge badge-blue">Intermediate</span>
-          </div>
-          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">FastAPI Inference Server</h1>
-        </div>
-      </div>
-
-      <p className="text-[var(--text-muted)] mb-8">
-        Package a trained PyTorch model into a production-ready FastAPI service with dynamic batching,
-        Docker containerisation, and ONNX export for CPU inference. This is the bridge from model training to something an actual product team can ship.
-      </p>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
-        {[
-          { k: 'Framework', v: 'FastAPI' },
-          { k: 'Focus', v: 'Serving' },
-          { k: 'Time', v: '6–8 hrs' },
-          { k: 'Hardware', v: 'Any' },
-        ].map(({ k, v }) => (
-          <div key={k} className="card text-center py-3">
-            <div className="text-sm text-[var(--text-muted)]">{k}</div>
-            <div className="font-bold text-[var(--text-primary)] mt-1">{v}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className="card mb-10">
-        <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn</h2>
-        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
-          <li>▸ How to turn a notebook model into a real callable service boundary</li>
-          <li>▸ How batching, latency, and throughput trade off against each other</li>
-          <li>▸ Why model serving is mostly systems design, not just framework syntax</li>
-          <li>▸ How ONNX and Docker fit into deployment portability</li>
-          <li>▸ How to instrument a service so regressions can be measured instead of guessed</li>
-        </ul>
-      </div>
-
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code: FastAPI Serving Skeleton</h2>
-      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-[var(--code-bg)] border border-[var(--border)]">{`from contextlib import asynccontextmanager
-from fastapi import FastAPI
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
+      <nav className="text-sm text-[var(--text-muted)] mb-8"><Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link><span className="mx-2">/</span><span className="text-[var(--text-primary)]">Inference Server</span></nav>
+      <h1 className="text-3xl font-extrabold text-[var(--text-primary)] mb-4">FastAPI Inference Server / FastAPI 推理服务</h1>
+      <p className="text-[var(--text-muted)] mb-8">A model is not useful in production until it is wrapped in a stable API, observed with metrics, and optimized for latency and throughput. <br />一个模型在生产环境中要真正有用，必须被包装成稳定 API，带监控指标，并对延迟和吞吐做过优化。</p>
+      <div className="card mb-8"><h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn / 你会学到什么</h2><ul className="text-sm space-y-2 text-[var(--text-muted)]"><li>▸ Clean model loading lifecycle / 干净的模型加载生命周期</li><li>▸ API schema and payload validation / API schema 与 payload 校验</li><li>▸ Batching, latency, throughput tradeoffs / batching、延迟与吞吐权衡</li><li>▸ Observability and production debugging / 可观测性与生产调试</li></ul></div>
+      <pre className="text-xs leading-relaxed overflow-x-auto mb-8 rounded-xl p-4">{`from fastapi import FastAPI
 from pydantic import BaseModel
-import torch
 
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+app = FastAPI()
 
 class PredictRequest(BaseModel):
-    texts: list[str]
+    text: str
 
-class PredictResponse(BaseModel):
-    predictions: list[int]
-    scores: list[float]
-
-def load_model():
-    # TODO: replace with your actual model/tokenizer loading logic
-    model = torch.jit.load("model.ts", map_location=DEVICE)
-    model.eval()
-    return model
-
-def preprocess(texts: list[str]) -> torch.Tensor:
-    # TODO: tokenize / numericalize / batch pad
-    raise NotImplementedError
-
-@torch.no_grad()
-def predict_batch(model, texts: list[str]):
-    inputs = preprocess(texts).to(DEVICE)
-    logits = model(inputs)
-    probs = logits.softmax(dim=-1)
-    preds = probs.argmax(dim=-1)
-    return preds.cpu().tolist(), probs.max(dim=-1).values.cpu().tolist()
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    app.state.model = load_model()
-    yield
-
-app = FastAPI(lifespan=lifespan)
-
-@app.get("/health")
-def health():
-    return {"status": "ok", "device": DEVICE}
-
-@app.post("/predict", response_model=PredictResponse)
+@app.post("/predict")
 def predict(req: PredictRequest):
-    preds, scores = predict_batch(app.state.model, req.texts)
-    return PredictResponse(predictions=preds, scores=scores)`}</pre>
-
-      <div className="card">
-        <h2 className="font-bold text-[var(--text-primary)] mb-3">Stack</h2>
-        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
-          <li>▸ FastAPI + uvicorn async server</li>
-          <li>▸ Dynamic batching with asyncio.Queue</li>
-          <li>▸ ONNX export + onnxruntime-gpu</li>
-          <li>▸ Docker multi-stage build (cuda base → slim)</li>
-          <li>▸ /health, /predict, /metrics endpoints</li>
-        </ul>
-      </div>
-      <div className="space-y-4 mt-8">
-        {STEPS.map((step, idx) => (
-          <div key={step.title} className="card flex gap-4">
-            <span className="text-2xl font-extrabold text-green-400/40 font-mono w-8 shrink-0">{idx + 1}</span>
-            <div>
-              <h3 className="font-semibold text-[var(--text-primary)]">{step.title}</h3>
-              <p className="text-sm text-[var(--text-muted)] mt-1">{step.body}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 mt-12">Common Pitfalls</h2>
-      <div className="space-y-3 mb-12">
-        {PITFALLS.map((p) => (
-          <div key={p.title} className="card border-yellow-500/20">
-            <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
-            <p className="text-xs text-[var(--text-muted)]">{p.body}</p>
-          </div>
-        ))}
-      </div>
-
-      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Hardware Comparison</h2>
-      <div className="overflow-x-auto mb-10">
-        <table className="w-full text-xs text-[var(--text-muted)] border-collapse">
-          <thead>
-            <tr className="border-b border-[var(--border)]">
-              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Hardware</th>
-              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Local dev</th>
-              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">GPU serving</th>
-              <th className="text-left py-2 text-[var(--text-primary)] font-semibold">Load testing</th>
-            </tr>
-          </thead>
-          <tbody>
-            {HARDWARE_ROWS.map((r) => (
-              <tr key={r.hw} className="border-b border-[var(--border)]">
-                <td className="py-2 pr-4 text-[var(--text-primary)] font-medium">{r.hw}</td>
-                <td className="py-2 pr-4">{r.local_dev}</td>
-                <td className="py-2 pr-4">{r.gpu_serving}</td>
-                <td className="py-2">{r.load_test}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="card">
-        <h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria</h2>
-        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
-          <li>✅ Service boots with model loaded once and health endpoint passes</li>
-          <li>✅ Prediction endpoint returns validated structured outputs</li>
-          <li>✅ Docker image builds and runs locally with the same API contract</li>
-          <li>✅ ONNX or TorchScript export matches PyTorch outputs on a validation batch</li>
-          <li>⭐ Stretch: Add request batching queue with latency histogram</li>
-          <li>⭐ Stretch: Add Prometheus metrics and load-test report</li>
-        </ul>
-      </div>
+    return {"output": model_infer(req.text)}`}</pre>
+      <div className="card mb-8"><h2 className="font-bold text-[var(--text-primary)] mb-3">Code walkthrough / 代码要点解释</h2><p className="text-sm text-[var(--text-muted)]">The important idea is separation of concerns: request validation, preprocessing, model inference, and postprocessing should not be tangled together. That makes profiling and scaling much easier. <br />核心思想是职责分离，请求校验、预处理、模型推理和后处理不要搅在一起，这样 profiling 和扩容才会容易很多。</p></div>
+      <div className="card mb-8"><h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria / 完成标准</h2><ul className="text-sm space-y-2 text-[var(--text-muted)]"><li>✅ /health and /predict endpoints work / /health 与 /predict 接口可用</li><li>✅ Load testing produces stable latency metrics / 压测后能得到稳定延迟指标</li><li>✅ Basic batching or throughput optimization is demonstrated / 展示基础 batching 或吞吐优化</li></ul></div>
+      <div className="card"><h2 className="font-bold text-[var(--text-primary)] mb-3">References / 参考资料</h2><ul className="space-y-2 text-sm">{REFERENCES.map((r) => <li key={r.href}><a href={r.href} target="_blank" rel="noreferrer" className="text-brand-300 hover:text-brand-200">{r.label}</a></li>)}</ul></div>
     </div>
   );
 }
