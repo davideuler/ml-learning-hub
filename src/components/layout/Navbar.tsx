@@ -12,6 +12,7 @@ const NAV_LINKS = [
   { href: '/courses',   label: 'Courses'  },
   { href: '/projects',  label: 'Projects' },
   { href: '/math',      label: 'Math'     },
+  { href: '/systems/training-inference', label: 'Systems' },
   { href: '/hardware',  label: 'Hardware' },
 ];
 
@@ -25,6 +26,7 @@ export function Navbar() {
     Courses: locale === 'zh' ? '课程' : 'Courses',
     Projects: locale === 'zh' ? '项目' : 'Projects',
     Math: locale === 'zh' ? '数学' : 'Math',
+    Systems: locale === 'zh' ? '系统' : 'Systems',
     Hardware: locale === 'zh' ? '硬件' : 'Hardware',
     github: locale === 'zh' ? 'GitHub 仓库 ↗' : 'GitHub ↗',
     brand: locale === 'zh' ? '机器学习实战' : 'ML Hub',

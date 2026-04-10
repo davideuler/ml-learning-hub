@@ -220,12 +220,33 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-24 grid sm:grid-cols-2 gap-6">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mb-24 grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
         <Link href="/math" className="card group">
           <div className="text-3xl mb-3">∑</div>
           <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2 group-hover:text-brand-300 transition-colors">{isZh ? '数学基础' : 'Math Foundations'}</h3>
           <p className="text-[var(--text-muted)] text-sm">
             {isZh ? '线性代数、微积分、概率统计，都结合 NumPy 和 PyTorch 场景讲解，只讲深度学习真正用得上的部分。' : 'Linear algebra, calculus, probability, illustrated with NumPy and PyTorch instead of abstract symbolism.'}
+          </p>
+        </Link>
+        <Link href="/systems/training-inference" className="card group">
+          <div className="text-3xl mb-3">⚙️</div>
+          <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2 group-hover:text-brand-300 transition-colors">{isZh ? '训练与推理' : 'Training & Inference'}</h3>
+          <p className="text-[var(--text-muted)] text-sm">
+            {isZh ? 'PyTorch、分布式训练、混合精度、vLLM、KV cache、profiling 和显存管理的双语技术总览。' : 'A bilingual overview of PyTorch, distributed training, mixed precision, vLLM, KV cache, profiling, and memory management.'}
+          </p>
+        </Link>
+        <Link href="/systems/optimization-concepts" className="card group">
+          <div className="text-3xl mb-3">🧭</div>
+          <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2 group-hover:text-brand-300 transition-colors">{isZh ? '优化概念' : 'Optimization Concepts'}</h3>
+          <p className="text-[var(--text-muted)] text-sm">
+            {isZh ? 'reward design、credit assignment、探索与利用、off-policy / on-policy 等关键概念。' : 'Core concepts like reward design, credit assignment, exploration vs exploitation, and off-policy vs on-policy.'}
+          </p>
+        </Link>
+        <Link href="/systems/model-thinking" className="card group">
+          <div className="text-3xl mb-3">🧠</div>
+          <h3 className="text-lg font-bold text-[var(--text-primary)] mb-2 group-hover:text-brand-300 transition-colors">{isZh ? '模型判断力' : 'Model Thinking'}</h3>
+          <p className="text-[var(--text-muted)] text-sm">
+            {isZh ? '理解长上下文、RAG、LoRA、幻觉、量化、KV cache 成本与模型架构 tradeoff。' : 'Understand long context, RAG, LoRA, hallucination, quantization, KV cache cost, and architecture tradeoffs.'}
           </p>
         </Link>
         <Link href="/hardware" className="card group">
