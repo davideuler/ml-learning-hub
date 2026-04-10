@@ -34,7 +34,8 @@ const COPY = {
     projectGuide: 'View Project Guide →',
     hardware: 'Hardware Setup →',
     hours: '~28 hours',
-    modulesCount: '10 modules',
+    modulesCount: '9 modules',
+    moduleCta: 'Open module lesson →',
   },
   zh: {
     breadcrumb: 'PyTorch 基础',
@@ -60,9 +61,12 @@ const COPY = {
     projectGuide: '查看项目指南 →',
     hardware: '查看硬件建议 →',
     hours: '约 28 小时',
-    modulesCount: '10 个模块',
+    modulesCount: '9 个模块',
+    moduleCta: '进入模块单页 →',
   },
 } as const;
+
+const MODULE_SLUGS = ['tensor-fundamentals','autograd-backpropagation','building-with-nn-module','losses-optimizers-schedulers','data-pipeline-design','training-loop-patterns','gpu-acceleration-basics','convolutional-networks','cnn-capstone-cifar10'] as const;
 
 const MODULES = [
   {
@@ -439,7 +443,7 @@ export function PyTorchFoundationsPageClient() {
                 <p key={line} className="text-sm text-[var(--text-muted)]">{line}</p>
               ))}
             </div>
-          </div>
+                                  </div>
         ))}
       </div>
 
@@ -470,6 +474,9 @@ export function PyTorchFoundationsPageClient() {
                 <p className="font-semibold text-[var(--text-primary)] mb-2">{t.output}</p>
                 <p className="text-[var(--text-muted)]">{mod[locale].output}</p>
               </div>
+            </div>
+            <div className="mt-4">
+              <Link href={`/courses/pytorch-foundations/${MODULE_SLUGS[mod.id - 1]}`} className="text-sm text-brand-300 hover:text-brand-200 font-medium">{t.moduleCta}</Link>
             </div>
           </div>
         ))}

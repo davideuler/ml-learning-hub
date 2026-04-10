@@ -28,6 +28,7 @@ const COPY = {
     tianshouCta: 'View Tianshou Project →',
     hours: '~34 hours',
     modulesCount: '11 modules',
+    moduleCta: 'Open module lesson →',
   },
   zh: {
     breadcrumb: '强化学习',
@@ -47,8 +48,11 @@ const COPY = {
     tianshouCta: '查看 Tianshou 项目 →',
     hours: '约 34 小时',
     modulesCount: '11 个模块',
+    moduleCta: '进入模块单页 →',
   },
 } as const;
+
+const MODULE_SLUGS = ['mdps-bellman','dynamic-programming','monte-carlo-methods','temporal-difference-learning','deep-q-networks','policy-gradients','actor-critic','ppo','tianshou-engineering','cartpole-project','ppo-mujoco-capstone'] as const;
 
 const MODULES = [
   { id: 1, en: { title: 'MDPs and Bellman Thinking', summary: 'Learn the formal language of RL before touching algorithms.', learn: ['What states, actions, rewards, transitions, and return actually mean', 'Why Bellman equations sit at the center of RL reasoning', 'How discounting changes optimization goals'], practice: 'Model a toy GridWorld as an MDP and write out returns for several trajectories.', output: 'A short MDP worksheet with Bellman updates done by hand.' }, zh: { title: 'MDP 与 Bellman 思维', summary: '在碰算法之前，先掌握强化学习的形式化语言。', learn: ['真正理解 state、action、reward、transition 和 return', '为什么 Bellman 方程处在 RL 推理的中心', 'discount factor 如何改变优化目标'], practice: '把一个 toy GridWorld 建模成 MDP，并手写多条轨迹的 return。', output: '一份手算 Bellman 更新的 MDP 小练习。' } },
@@ -137,6 +141,9 @@ export function ReinforcementLearningPageClient() {
               <div><p className="font-semibold text-[var(--text-primary)] mb-2">{t.learn}</p><ul className="space-y-1 text-[var(--text-muted)]">{mod[locale].learn.map((item) => <li key={item}>▸ {item}</li>)}</ul></div>
               <div><p className="font-semibold text-[var(--text-primary)] mb-2">{t.practice}</p><p className="text-[var(--text-muted)]">{mod[locale].practice}</p></div>
               <div><p className="font-semibold text-[var(--text-primary)] mb-2">{t.output}</p><p className="text-[var(--text-muted)]">{mod[locale].output}</p></div>
+            </div>
+            <div className="mt-4">
+              <Link href={`/courses/reinforcement-learning/${MODULE_SLUGS[mod.id - 1]}`} className="text-sm text-brand-300 hover:text-brand-200 font-medium">{t.moduleCta}</Link>
             </div>
           </div>
         ))}

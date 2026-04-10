@@ -33,6 +33,7 @@ const COPY = {
     bertCta: 'View BERT Fine-Tuning Project →',
     hours: '~34 hours',
     modulesCount: '11 modules',
+    moduleCta: 'Open module lesson →',
   },
   zh: {
     breadcrumb: 'Transformer 深度剖析',
@@ -57,8 +58,11 @@ const COPY = {
     bertCta: '查看 BERT 微调项目 →',
     hours: '约 34 小时',
     modulesCount: '11 个模块',
+    moduleCta: '进入模块单页 →',
   },
 } as const;
+
+const MODULE_SLUGS = ['why-attention','scaled-dot-product-attention','multi-head-attention','positional-encoding','transformer-block-anatomy','encoder-models','decoder-models','training-recipes','fine-tuning-peft','mini-gpt-capstone','modern-variants'] as const;
 
 const MODULES = [
   {
@@ -176,7 +180,7 @@ export function TransformerDeepDivePageClient() {
             <div className="space-y-2">
               {block[locale].content.map((line) => <p key={line} className="text-sm text-[var(--text-muted)]">{line}</p>)}
             </div>
-          </div>
+                      </div>
         ))}
       </div>
 
@@ -203,6 +207,9 @@ export function TransformerDeepDivePageClient() {
                 <p className="font-semibold text-[var(--text-primary)] mb-2">{t.output}</p>
                 <p className="text-[var(--text-muted)]">{mod[locale].output}</p>
               </div>
+            </div>
+            <div className="mt-4">
+              <Link href={`/courses/transformer-deep-dive/${MODULE_SLUGS[mod.id - 1]}`} className="text-sm text-brand-300 hover:text-brand-200 font-medium">{t.moduleCta}</Link>
             </div>
           </div>
         ))}
