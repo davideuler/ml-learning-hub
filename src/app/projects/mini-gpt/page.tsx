@@ -17,6 +17,40 @@ const STEPS = [
   { n: 8, title: 'Stretch Goals',     body: 'Flash Attention, multi-GPU (DDP), word-level tokenizer, perplexity eval.' },
 ];
 
+const PITFALLS = [
+  {
+    title: 'Wrong mask convention',
+    body: 'A single sign error in the causal mask lets tokens attend to the future. Unit-test with a tiny 4-token example before you trust any loss curve.',
+  },
+  {
+    title: 'Forgetting to shift targets',
+    body: 'Language modeling predicts the next token. Inputs and labels must be offset by one position, or the model will learn a trivial identity map.',
+  },
+  {
+    title: 'Using dropout during sampling',
+    body: 'If you forget model.eval(), generated text quality looks random and inconsistent because dropout remains active at inference time.',
+  },
+  {
+    title: 'No gradient clipping',
+    body: 'Small GPTs can still spike gradients early in training. Clip grad norm and monitor loss explosions, especially on longer context lengths.',
+  },
+  {
+    title: 'KV cache bugs from tensor shape assumptions',
+    body: 'If you extend the project to cached decoding, shape mismatches often come from mixing batch-first and time-first assumptions. Write explicit asserts.',
+  },
+  {
+    title: 'Comparing runs with different tokenization',
+    body: 'Character-level and word-level perplexity are not directly comparable. Keep tokenization fixed if you want meaningful benchmark comparisons.',
+  },
+];
+
+const HARDWARE_ROWS = [
+  { hw: 'Mac M4 Pro 128G', train: '✅ ~35–50 min', longer_ctx: '⚠️ Manageable', sweeps: '❌ Limited' },
+  { hw: 'RTX 4090', train: '✅ ~15–25 min', longer_ctx: '✅ Good', sweeps: '✅ Good for ablations' },
+  { hw: 'A100 80GB', train: '✅ ~10–15 min', longer_ctx: '✅ Excellent', sweeps: '✅ Excellent' },
+  { hw: '8× L20', train: '⚠️ Overkill', longer_ctx: '✅ Best for scaling', sweeps: '✅ Best for many experiments' },
+];
+
 export default function MiniGPTPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
@@ -43,13 +77,24 @@ export default function MiniGPTPage() {
         it generate vaguely Elizabethan text.
       </p>
 
+      <div className="card mb-10">
+        <h2 className="font-bold text-white mb-3">What you learn</h2>
+        <ul className="text-sm space-y-2 text-slate-400">
+          <li>▸ How token embeddings, positional information, and masked attention fit together</li>
+          <li>▸ Why pre-norm residual blocks are easier to train than naive transformer stacks</li>
+          <li>▸ How sampling strategy changes perceived model quality, even with the same checkpoint</li>
+          <li>▸ How to think about context length, parameter count, and throughput tradeoffs</li>
+          <li>▸ Why GPT training is mostly about data pipeline discipline and tensor shape sanity</li>
+        </ul>
+      </div>
+
       {/* Specs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
         {[
           { k: 'Params',    v: '~10M' },
           { k: 'Dataset',   v: 'Shakespeare 1MB' },
-          { k: 'GPU',       v: '1× RTX 3090' },
-          { k: 'Train time',v: '~20 min' },
+          { k: 'Hardware',  v: '4090 / A100' },
+          { k: 'Train time',v: '~20–30 min' },
         ].map(({ k, v }) => (
           <div key={k} className="card text-center py-3">
             <div className="text-sm text-slate-500">{k}</div>
@@ -61,7 +106,7 @@ export default function MiniGPTPage() {
       {/* Starter code snippet */}
       <div className="mb-10">
         <h2 className="text-xl font-bold text-white mb-4">Starter Architecture Sketch</h2>
-        <pre className="text-xs leading-relaxed overflow-x-auto">{`import torch
+        <pre className="text-xs leading-relaxed overflow-x-auto rounded-xl p-4 bg-slate-900 border border-slate-700">{`import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -108,6 +153,40 @@ class CausalSelfAttention(nn.Module):
             </div>
           </div>
         ))}
+      </div>
+
+      <h2 className="text-xl font-bold text-white mb-4 mt-12">Common Pitfalls</h2>
+      <div className="space-y-3 mb-12">
+        {PITFALLS.map((p) => (
+          <div key={p.title} className="card border-yellow-500/20">
+            <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
+            <p className="text-xs text-slate-400">{p.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-xl font-bold text-white mb-4">Hardware Comparison</h2>
+      <div className="overflow-x-auto mb-10">
+        <table className="w-full text-xs text-slate-400 border-collapse">
+          <thead>
+            <tr className="border-b border-slate-700">
+              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Hardware</th>
+              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Base train run</th>
+              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Longer context</th>
+              <th className="text-left py-2 text-slate-300 font-semibold">Ablation sweeps</th>
+            </tr>
+          </thead>
+          <tbody>
+            {HARDWARE_ROWS.map((r) => (
+              <tr key={r.hw} className="border-b border-slate-800">
+                <td className="py-2 pr-4 text-white font-medium">{r.hw}</td>
+                <td className="py-2 pr-4">{r.train}</td>
+                <td className="py-2 pr-4">{r.longer_ctx}</td>
+                <td className="py-2">{r.sweeps}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
       {/* Rubric */}

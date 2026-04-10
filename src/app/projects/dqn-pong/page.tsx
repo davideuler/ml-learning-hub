@@ -49,6 +49,40 @@ const STEPS = [
   },
 ];
 
+const PITFALLS = [
+  {
+    title: 'Replay buffer too small',
+    body: 'Atari observations are highly correlated. A tiny replay buffer makes DQN overfit to recent frames and destabilizes Q targets.',
+  },
+  {
+    title: 'Wrong done mask around life loss',
+    body: 'EpisodicLife wrappers treat life loss like terminal for learning but not for full environment reset. Mixing these signals incorrectly hurts training a lot.',
+  },
+  {
+    title: 'Target network copied too rarely',
+    body: 'If the target network lags too much, learning becomes stale. If you update it too often, DQN loses the stabilizing effect entirely.',
+  },
+  {
+    title: 'No-op and fire reset wrappers omitted',
+    body: 'Pong needs proper reset behaviour. If you skip Atari wrappers, comparisons to published results become meaningless and exploration weakens.',
+  },
+  {
+    title: 'Storing float32 frames in replay',
+    body: 'Use uint8 for frame storage and normalize only on batch load. Float32 replay buffers waste memory and reduce effective experience capacity.',
+  },
+  {
+    title: 'Epsilon decay ends before the agent has seen enough',
+    body: 'If exploration collapses too early, DQN locks into poor paddle behaviour. Plot epsilon and reward together, not reward alone.',
+  },
+];
+
+const HARDWARE_ROWS = [
+  { hw: 'Mac M4 Pro 128G', single_run: '⚠️ Debug only', double_dqn: '❌ Not practical', sweep: '❌ No' },
+  { hw: 'RTX 4090', single_run: '✅ Best default', double_dqn: '✅ Good', sweep: '⚠️ Limited sweeps' },
+  { hw: 'A100 80GB', single_run: '✅ Excellent', double_dqn: '✅ Excellent', sweep: '✅ Strong' },
+  { hw: '8× L20', single_run: '⚠️ Overkill', double_dqn: '✅ Best for variants', sweep: '✅ Best for many seeds' },
+];
+
 export default function DQNPongPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
@@ -90,7 +124,7 @@ export default function DQNPongPage() {
       </div>
 
       <h2 className="text-xl font-bold text-white mb-4">Starter Code: Q-Network</h2>
-      <pre className="text-xs leading-relaxed overflow-x-auto mb-10">{`import torch
+      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-slate-900 border border-slate-700">{`import torch
 import torch.nn as nn
 
 class QNetwork(nn.Module):
@@ -166,6 +200,40 @@ class ReplayBuffer:
         ))}
       </div>
 
+      <h2 className="text-xl font-bold text-white mb-4 mt-12">Common Pitfalls</h2>
+      <div className="space-y-3 mb-12">
+        {PITFALLS.map((p) => (
+          <div key={p.title} className="card border-yellow-500/20">
+            <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
+            <p className="text-xs text-slate-400">{p.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-xl font-bold text-white mb-4">Hardware Comparison</h2>
+      <div className="overflow-x-auto mb-10">
+        <table className="w-full text-xs text-slate-400 border-collapse">
+          <thead>
+            <tr className="border-b border-slate-700">
+              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Hardware</th>
+              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Single DQN run</th>
+              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Double/Dueling DQN</th>
+              <th className="text-left py-2 text-slate-300 font-semibold">Multi-seed sweep</th>
+            </tr>
+          </thead>
+          <tbody>
+            {HARDWARE_ROWS.map((r) => (
+              <tr key={r.hw} className="border-b border-slate-800">
+                <td className="py-2 pr-4 text-white font-medium">{r.hw}</td>
+                <td className="py-2 pr-4">{r.single_run}</td>
+                <td className="py-2 pr-4">{r.double_dqn}</td>
+                <td className="py-2">{r.sweep}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       <div className="mt-10 card">
         <h2 className="font-bold text-white mb-3">Grading Rubric</h2>
         <ul className="text-sm space-y-2 text-slate-400">
@@ -175,16 +243,6 @@ class ReplayBuffer:
           <li>✅ TensorBoard shows upward reward trend</li>
           <li>⭐ Stretch: Double DQN — compare learning curves</li>
           <li>⭐ Stretch: Prioritised Experience Replay — sample efficiency</li>
-        </ul>
-      </div>
-
-      <div className="mt-8 card border-orange-500/30">
-        <h2 className="font-bold text-white mb-3">Hardware guidance</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
-          <li>▸ <strong className="text-white">RTX 4090:</strong> Ideal for fast Atari experimentation, checkpointing, and variant testing.</li>
-          <li>▸ <strong className="text-white">A100:</strong> Best when running multiple seeds or Double/Dueling DQN ablations in parallel.</li>
-          <li>▸ <strong className="text-white">8x L20:</strong> Useful for distributed sweeps, not necessary for a single Pong agent.</li>
-          <li>▸ <strong className="text-white">Mac M4 Pro 128G:</strong> Fine for environment debugging and short smoke tests, not recommended for full Atari training.</li>
         </ul>
       </div>
 
