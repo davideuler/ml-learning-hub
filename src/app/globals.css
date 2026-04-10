@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* KaTeX math rendering */
-@import 'katex/dist/katex.min.css';
-
 @layer base {
   :root {
     --bg-primary:   #0f0f1a;
