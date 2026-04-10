@@ -59,10 +59,10 @@ const HARDWARE_ROWS = [
 export default function InferenceServerPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <nav className="text-sm text-slate-500 mb-8">
-        <Link href="/projects" className="hover:text-slate-300">Projects</Link>
+      <nav className="text-sm text-[var(--text-muted)] mb-8">
+        <Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link>
         <span className="mx-2">/</span>
-        <span className="text-white">Inference Server</span>
+        <span className="text-[var(--text-primary)]">Inference Server</span>
       </nav>
 
       <div className="flex items-start gap-4 mb-4">
@@ -72,11 +72,11 @@ export default function InferenceServerPage() {
             <span className="badge badge-green">Production</span>
             <span className="badge badge-blue">Intermediate</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white">FastAPI Inference Server</h1>
+          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">FastAPI Inference Server</h1>
         </div>
       </div>
 
-      <p className="text-slate-400 mb-8">
+      <p className="text-[var(--text-muted)] mb-8">
         Package a trained PyTorch model into a production-ready FastAPI service with dynamic batching,
         Docker containerisation, and ONNX export for CPU inference. This is the bridge from model training to something an actual product team can ship.
       </p>
@@ -88,15 +88,15 @@ export default function InferenceServerPage() {
           { k: 'Hardware', v: 'Any' },
         ].map(({ k, v }) => (
           <div key={k} className="card text-center py-3">
-            <div className="text-sm text-slate-500">{k}</div>
-            <div className="font-bold text-white mt-1">{v}</div>
+            <div className="text-sm text-[var(--text-muted)]">{k}</div>
+            <div className="font-bold text-[var(--text-primary)] mt-1">{v}</div>
           </div>
         ))}
       </div>
 
       <div className="card mb-10">
-        <h2 className="font-bold text-white mb-3">What you learn</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>▸ How to turn a notebook model into a real callable service boundary</li>
           <li>▸ How batching, latency, and throughput trade off against each other</li>
           <li>▸ Why model serving is mostly systems design, not just framework syntax</li>
@@ -105,8 +105,8 @@ export default function InferenceServerPage() {
         </ul>
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4">Starter Code: FastAPI Serving Skeleton</h2>
-      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-slate-900 border border-slate-700">{`from contextlib import asynccontextmanager
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code: FastAPI Serving Skeleton</h2>
+      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-[var(--code-bg)] border border-[var(--border)]">{`from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from pydantic import BaseModel
 import torch
@@ -155,8 +155,8 @@ def predict(req: PredictRequest):
     return PredictResponse(predictions=preds, scores=scores)`}</pre>
 
       <div className="card">
-        <h2 className="font-bold text-white mb-3">Stack</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Stack</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>▸ FastAPI + uvicorn async server</li>
           <li>▸ Dynamic batching with asyncio.Queue</li>
           <li>▸ ONNX export + onnxruntime-gpu</li>
@@ -169,38 +169,38 @@ def predict(req: PredictRequest):
           <div key={step.title} className="card flex gap-4">
             <span className="text-2xl font-extrabold text-green-400/40 font-mono w-8 shrink-0">{idx + 1}</span>
             <div>
-              <h3 className="font-semibold text-white">{step.title}</h3>
-              <p className="text-sm text-slate-400 mt-1">{step.body}</p>
+              <h3 className="font-semibold text-[var(--text-primary)]">{step.title}</h3>
+              <p className="text-sm text-[var(--text-muted)] mt-1">{step.body}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4 mt-12">Common Pitfalls</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 mt-12">Common Pitfalls</h2>
       <div className="space-y-3 mb-12">
         {PITFALLS.map((p) => (
           <div key={p.title} className="card border-yellow-500/20">
             <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
-            <p className="text-xs text-slate-400">{p.body}</p>
+            <p className="text-xs text-[var(--text-muted)]">{p.body}</p>
           </div>
         ))}
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4">Hardware Comparison</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Hardware Comparison</h2>
       <div className="overflow-x-auto mb-10">
-        <table className="w-full text-xs text-slate-400 border-collapse">
+        <table className="w-full text-xs text-[var(--text-muted)] border-collapse">
           <thead>
-            <tr className="border-b border-slate-700">
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Hardware</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Local dev</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">GPU serving</th>
-              <th className="text-left py-2 text-slate-300 font-semibold">Load testing</th>
+            <tr className="border-b border-[var(--border)]">
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Hardware</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Local dev</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">GPU serving</th>
+              <th className="text-left py-2 text-[var(--text-primary)] font-semibold">Load testing</th>
             </tr>
           </thead>
           <tbody>
             {HARDWARE_ROWS.map((r) => (
-              <tr key={r.hw} className="border-b border-slate-800">
-                <td className="py-2 pr-4 text-white font-medium">{r.hw}</td>
+              <tr key={r.hw} className="border-b border-[var(--border)]">
+                <td className="py-2 pr-4 text-[var(--text-primary)] font-medium">{r.hw}</td>
                 <td className="py-2 pr-4">{r.local_dev}</td>
                 <td className="py-2 pr-4">{r.gpu_serving}</td>
                 <td className="py-2">{r.load_test}</td>
@@ -211,8 +211,8 @@ def predict(req: PredictRequest):
       </div>
 
       <div className="card">
-        <h2 className="font-bold text-white mb-3">Success Criteria</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>✅ Service boots with model loaded once and health endpoint passes</li>
           <li>✅ Prediction endpoint returns validated structured outputs</li>
           <li>✅ Docker image builds and runs locally with the same API contract</li>

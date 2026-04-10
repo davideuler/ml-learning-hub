@@ -66,10 +66,10 @@ const HARDWARE_ROWS = [
 export default function TianshouCartPolePage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <nav className="text-sm text-slate-500 mb-8">
-        <Link href="/projects" className="hover:text-slate-300">Projects</Link>
+      <nav className="text-sm text-[var(--text-muted)] mb-8">
+        <Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link>
         <span className="mx-2">/</span>
-        <span className="text-white">Tianshou CartPole</span>
+        <span className="text-[var(--text-primary)]">Tianshou CartPole</span>
       </nav>
 
       <div className="flex items-start gap-4 mb-4">
@@ -79,11 +79,11 @@ export default function TianshouCartPolePage() {
             <span className="badge badge-orange">RL</span>
             <span className="badge badge-blue">Intermediate</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white">Tianshou CartPole Pipeline</h1>
+          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">Tianshou CartPole Pipeline</h1>
         </div>
       </div>
 
-      <p className="text-slate-400 mb-8">
+      <p className="text-[var(--text-muted)] mb-8">
         Learn a production-grade RL library without drowning in complexity. This project turns a simple DQN agent
         into a reusable experiment pipeline: typed configs, vectorised collectors, replay buffers, and trainer
         hooks — the infrastructure a real team uses for repeatable RL research.
@@ -97,15 +97,15 @@ export default function TianshouCartPolePage() {
           { k: 'Hardware',    v: 'Any (CPU fine)' },
         ].map(({ k, v }) => (
           <div key={k} className="card text-center py-3">
-            <div className="text-sm text-slate-500">{k}</div>
-            <div className="font-bold text-white mt-1">{v}</div>
+            <div className="text-sm text-[var(--text-muted)]">{k}</div>
+            <div className="font-bold text-[var(--text-primary)] mt-1">{v}</div>
           </div>
         ))}
       </div>
 
       <div className="card mb-10">
-        <h2 className="font-bold text-white mb-3">What you learn</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>▸ How RL libraries separate policy logic, data collection, and optimisation</li>
           <li>▸ How to configure vectorised environments and replay buffers cleanly</li>
           <li>▸ When a framework speeds you up and when it hides important detail</li>
@@ -114,13 +114,13 @@ export default function TianshouCartPolePage() {
       </div>
 
       {/* Starter Code */}
-      <h2 className="text-xl font-bold text-white mb-4">Starter Code</h2>
-      <p className="text-sm text-slate-400 mb-4">
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code</h2>
+      <p className="text-sm text-[var(--text-muted)] mb-4">
         The scaffold below handles environment setup, policy construction, buffer, and trainer wiring.
         Your job: implement <code className="text-orange-300">QNet</code>, configure hyperparameters,
         add epsilon annealing in <code className="text-orange-300">train_fn</code>, and instrument logging.
       </p>
-      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-slate-900 border border-slate-700">{`# tianshou_cartpole.py  — skeleton to complete
+      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-[var(--code-bg)] border border-[var(--border)]">{`# tianshou_cartpole.py  — skeleton to complete
 import gymnasium as gym
 import torch
 import torch.nn as nn
@@ -226,47 +226,47 @@ print(f"Finished training: best_reward={result['best_reward']:.1f}")
 `}</pre>
 
       {/* Build Steps */}
-      <h2 className="text-xl font-bold text-white mb-6">Build Steps</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Build Steps</h2>
       <div className="space-y-4 mb-12">
         {STEPS.map((step, idx) => (
           <div key={step.title} className="card flex gap-4">
             <span className="text-2xl font-extrabold text-orange-400/40 font-mono w-8 shrink-0">{idx + 1}</span>
             <div>
-              <h3 className="font-semibold text-white">{step.title}</h3>
-              <p className="text-sm text-slate-400 mt-1">{step.body}</p>
+              <h3 className="font-semibold text-[var(--text-primary)]">{step.title}</h3>
+              <p className="text-sm text-[var(--text-muted)] mt-1">{step.body}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Pitfalls */}
-      <h2 className="text-xl font-bold text-white mb-4">Common Pitfalls</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Common Pitfalls</h2>
       <div className="space-y-3 mb-12">
         {PITFALLS.map((p) => (
           <div key={p.title} className="card border-yellow-500/20">
             <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
-            <p className="text-xs text-slate-400">{p.body}</p>
+            <p className="text-xs text-[var(--text-muted)]">{p.body}</p>
           </div>
         ))}
       </div>
 
       {/* Hardware Table */}
-      <h2 className="text-xl font-bold text-white mb-4">Hardware Comparison</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Hardware Comparison</h2>
       <div className="overflow-x-auto mb-10">
-        <table className="w-full text-xs text-slate-400 border-collapse">
+        <table className="w-full text-xs text-[var(--text-muted)] border-collapse">
           <thead>
-            <tr className="border-b border-slate-700">
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Hardware</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">CartPole</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">LunarLander</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Atari (1 seed)</th>
-              <th className="text-left py-2 text-slate-300 font-semibold">Atari (sweep)</th>
+            <tr className="border-b border-[var(--border)]">
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Hardware</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">CartPole</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">LunarLander</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Atari (1 seed)</th>
+              <th className="text-left py-2 text-[var(--text-primary)] font-semibold">Atari (sweep)</th>
             </tr>
           </thead>
           <tbody>
             {HARDWARE_ROWS.map((r) => (
-              <tr key={r.hw} className="border-b border-slate-800">
-                <td className="py-2 pr-4 text-white font-medium">{r.hw}</td>
+              <tr key={r.hw} className="border-b border-[var(--border)]">
+                <td className="py-2 pr-4 text-[var(--text-primary)] font-medium">{r.hw}</td>
                 <td className="py-2 pr-4">{r.cartpole}</td>
                 <td className="py-2 pr-4">{r.lunar}</td>
                 <td className="py-2 pr-4">{r.atari_single}</td>
@@ -278,8 +278,8 @@ print(f"Finished training: best_reward={result['best_reward']:.1f}")
       </div>
 
       <div className="card border-orange-500/30">
-        <p className="text-sm text-slate-400">
-          <strong className="text-white">Recommended sequence:</strong> finish the hand-written{' '}
+        <p className="text-sm text-[var(--text-muted)]">
+          <strong className="text-[var(--text-primary)]">Recommended sequence:</strong> finish the hand-written{' '}
           <Link href="/projects/dqn-pong" className="text-brand-300 hover:underline">DQN Pong project</Link> first,
           then return here. That way you understand what Tianshou is abstracting instead of cargo-culting the API.
         </p>

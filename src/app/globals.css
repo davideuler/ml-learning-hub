@@ -13,6 +13,7 @@
     --accent: #6366f1;
     --nav-bg: rgba(15, 15, 26, 0.9);
     --hover-bg: rgba(255, 255, 255, 0.05);
+    --code-bg: #0d1117;
   }
 
   html[data-theme='light'] {
@@ -25,6 +26,7 @@
     --accent: #4f46e5;
     --nav-bg: rgba(248, 250, 252, 0.92);
     --hover-bg: rgba(15, 23, 42, 0.05);
+    --code-bg: #e2e8f0;
   }
 
   html {

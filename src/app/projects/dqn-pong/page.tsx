@@ -86,10 +86,10 @@ const HARDWARE_ROWS = [
 export default function DQNPongPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <nav className="text-sm text-slate-500 mb-8">
-        <Link href="/projects" className="hover:text-slate-300">Projects</Link>
+      <nav className="text-sm text-[var(--text-muted)] mb-8">
+        <Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link>
         <span className="mx-2">/</span>
-        <span className="text-white">DQN Pong</span>
+        <span className="text-[var(--text-primary)]">DQN Pong</span>
       </nav>
 
       <div className="flex items-start gap-4 mb-4">
@@ -99,11 +99,11 @@ export default function DQNPongPage() {
             <span className="badge badge-orange">RL</span>
             <span className="badge badge-blue">Intermediate</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white">DQN Atari Pong</h1>
+          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">DQN Atari Pong</h1>
         </div>
       </div>
 
-      <p className="text-slate-400 mb-8">
+      <p className="text-[var(--text-muted)] mb-8">
         Implement the original DeepMind Deep Q-Network from scratch in PyTorch. Train it to beat
         the built-in AI opponent in Pong-v5. You will own every component: CNN, replay buffer,
         target network, ε-greedy exploration.
@@ -117,14 +117,14 @@ export default function DQNPongPage() {
           { k: 'Hardware',    v: '4090 / A100' },
         ].map(({ k, v }) => (
           <div key={k} className="card text-center py-3">
-            <div className="text-sm text-slate-500">{k}</div>
-            <div className="font-bold text-white mt-1">{v}</div>
+            <div className="text-sm text-[var(--text-muted)]">{k}</div>
+            <div className="font-bold text-[var(--text-primary)] mt-1">{v}</div>
           </div>
         ))}
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4">Starter Code: Q-Network</h2>
-      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-slate-900 border border-slate-700">{`import torch
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code: Q-Network</h2>
+      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-[var(--code-bg)] border border-[var(--border)]">{`import torch
 import torch.nn as nn
 
 class QNetwork(nn.Module):
@@ -185,7 +185,7 @@ class ReplayBuffer:
             torch.from_numpy(self.dones[idx]).to(device),
         )`}</pre>
 
-      <h2 className="text-xl font-bold text-white mb-6">Build Steps</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Build Steps</h2>
       <div className="space-y-4">
         {STEPS.map((s) => (
           <div key={s.n} className="card flex gap-4">
@@ -193,38 +193,38 @@ class ReplayBuffer:
               {s.n}
             </span>
             <div>
-              <h3 className="font-semibold text-white">{s.title}</h3>
-              <p className="text-sm text-slate-400 mt-1">{s.body}</p>
+              <h3 className="font-semibold text-[var(--text-primary)]">{s.title}</h3>
+              <p className="text-sm text-[var(--text-muted)] mt-1">{s.body}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4 mt-12">Common Pitfalls</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 mt-12">Common Pitfalls</h2>
       <div className="space-y-3 mb-12">
         {PITFALLS.map((p) => (
           <div key={p.title} className="card border-yellow-500/20">
             <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
-            <p className="text-xs text-slate-400">{p.body}</p>
+            <p className="text-xs text-[var(--text-muted)]">{p.body}</p>
           </div>
         ))}
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4">Hardware Comparison</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Hardware Comparison</h2>
       <div className="overflow-x-auto mb-10">
-        <table className="w-full text-xs text-slate-400 border-collapse">
+        <table className="w-full text-xs text-[var(--text-muted)] border-collapse">
           <thead>
-            <tr className="border-b border-slate-700">
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Hardware</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Single DQN run</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Double/Dueling DQN</th>
-              <th className="text-left py-2 text-slate-300 font-semibold">Multi-seed sweep</th>
+            <tr className="border-b border-[var(--border)]">
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Hardware</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Single DQN run</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Double/Dueling DQN</th>
+              <th className="text-left py-2 text-[var(--text-primary)] font-semibold">Multi-seed sweep</th>
             </tr>
           </thead>
           <tbody>
             {HARDWARE_ROWS.map((r) => (
-              <tr key={r.hw} className="border-b border-slate-800">
-                <td className="py-2 pr-4 text-white font-medium">{r.hw}</td>
+              <tr key={r.hw} className="border-b border-[var(--border)]">
+                <td className="py-2 pr-4 text-[var(--text-primary)] font-medium">{r.hw}</td>
                 <td className="py-2 pr-4">{r.single_run}</td>
                 <td className="py-2 pr-4">{r.double_dqn}</td>
                 <td className="py-2">{r.sweep}</td>
@@ -235,8 +235,8 @@ class ReplayBuffer:
       </div>
 
       <div className="mt-10 card">
-        <h2 className="font-bold text-white mb-3">Grading Rubric</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Grading Rubric</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>✅ Agent trains without NaN Q-values</li>
           <li>✅ Mean episode reward ≥ +5 after 1M steps</li>
           <li>✅ Mean episode reward ≥ +18 after 3M steps (beats AI)</li>
@@ -247,8 +247,8 @@ class ReplayBuffer:
       </div>
 
       <div className="mt-6 card border-orange-500/30">
-        <p className="text-sm text-slate-400">
-          <strong className="text-white">Prerequisite:</strong> Complete the{' '}
+        <p className="text-sm text-[var(--text-muted)]">
+          <strong className="text-[var(--text-primary)]">Prerequisite:</strong> Complete the{' '}
           <Link href="/courses/reinforcement-learning" className="text-brand-300 hover:underline">
             RL course
           </Link>{' '}

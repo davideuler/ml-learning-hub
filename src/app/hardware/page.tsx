@@ -51,12 +51,12 @@ const CLOUD_PROVIDERS = [
 export default function HardwarePage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16">
-      <h1 className="text-4xl font-extrabold text-white mb-4">Hardware Guide</h1>
-      <p className="text-slate-400 text-lg max-w-2xl mb-4">
+      <h1 className="text-4xl font-extrabold text-[var(--text-primary)] mb-4">Hardware Guide</h1>
+      <p className="text-[var(--text-muted)] text-lg max-w-2xl mb-4">
         Machine-specific setup, tuning, and gotchas for every GPU in our curriculum.
         Stop wasting hours on environment errors — start from a known-working baseline.
       </p>
-      <p className="text-sm text-slate-500 mb-12">
+      <p className="text-sm text-[var(--text-muted)] mb-12">
         Jump to: {' '}
         <a href="#comparison" className="text-brand-300 hover:underline">Comparison</a> ·{' '}
         <a href="#m4pro" className="text-brand-300 hover:underline">M4 Pro</a> ·{' '}
@@ -70,13 +70,13 @@ export default function HardwarePage() {
 
       {/* ── 1. Machine Comparison Table ─────────────────────────────── */}
       <section id="comparison" className="mb-16 scroll-mt-20">
-        <h2 className="text-2xl font-bold text-white mb-6">Machine Comparison</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">Machine Comparison</h2>
         <div className="overflow-x-auto rounded-2xl border border-[var(--border)]">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[var(--border)]" style={{ background: 'var(--bg-card)' }}>
                 {['Machine', 'VRAM', 'Bandwidth', 'FP16 TFLOPS', 'BF16', 'Best Use Case'].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left text-slate-400 font-semibold whitespace-nowrap">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-[var(--text-muted)] font-semibold whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -85,18 +85,18 @@ export default function HardwarePage() {
                 <tr key={m.name}
                     className="border-b border-[var(--border)] hover:bg-white/5 transition-colors"
                     style={{ background: i % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-card)' }}>
-                  <td className="px-4 py-3 font-mono font-semibold text-white whitespace-nowrap">{m.name}</td>
-                  <td className="px-4 py-3 text-slate-300 whitespace-nowrap">{m.vram}</td>
-                  <td className="px-4 py-3 text-slate-300 whitespace-nowrap">{m.bandwidth}</td>
-                  <td className="px-4 py-3 text-slate-300 whitespace-nowrap">{m.fp16tflops}</td>
+                  <td className="px-4 py-3 font-mono font-semibold text-[var(--text-primary)] whitespace-nowrap">{m.name}</td>
+                  <td className="px-4 py-3 text-[var(--text-primary)] whitespace-nowrap">{m.vram}</td>
+                  <td className="px-4 py-3 text-[var(--text-primary)] whitespace-nowrap">{m.bandwidth}</td>
+                  <td className="px-4 py-3 text-[var(--text-primary)] whitespace-nowrap">{m.fp16tflops}</td>
                   <td className="px-4 py-3 text-center">{m.bf16}</td>
-                  <td className="px-4 py-3 text-slate-400">{m.useCase}</td>
+                  <td className="px-4 py-3 text-[var(--text-muted)]">{m.useCase}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-slate-500 mt-3">
+        <p className="text-xs text-[var(--text-muted)] mt-3">
           * M4 Pro TFLOPS are for the Neural Engine; MPS compute is lower but memory bandwidth advantage is significant.
           L40S uses PCIe interconnect (not NVLink) — see multi-GPU section for implications.
         </p>
@@ -107,21 +107,21 @@ export default function HardwarePage() {
         <div className="flex items-center gap-3 mb-6">
           <span className="text-3xl">🍎</span>
           <div>
-            <h2 className="text-2xl font-bold text-white">Mac M4 Pro 128GB</h2>
-            <p className="text-slate-400 text-sm">Apple Silicon · MPS backend · Unified memory architecture</p>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">Mac M4 Pro 128GB</h2>
+            <p className="text-[var(--text-muted)] text-sm">Apple Silicon · MPS backend · Unified memory architecture</p>
           </div>
         </div>
 
         <div className="card mb-4">
-          <h3 className="font-semibold text-white mb-1">Why unified memory matters</h3>
-          <p className="text-sm text-slate-400">
+          <h3 className="font-semibold text-[var(--text-primary)] mb-1">Why unified memory matters</h3>
+          <p className="text-sm text-[var(--text-muted)]">
             Unlike discrete GPUs where VRAM is separate from system RAM, the M4 Pro shares 128 GB
             between CPU and GPU with 273 GB/s bandwidth. A 70B model in 4-bit (≈35 GB) fits in one machine
             and the GPU never stalls waiting for data transfers. No PCIe bottleneck.
           </p>
         </div>
 
-        <h3 className="text-lg font-semibold text-white mb-3">Environment Setup</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Environment Setup</h3>
         <pre className="text-xs leading-relaxed mb-4">{`# 1. Install Homebrew (if not present)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
@@ -140,7 +140,7 @@ pip install torch torchvision torchaudio
 python -c "import torch; print(torch.backends.mps.is_available())"
 # → True`}</pre>
 
-        <h3 className="text-lg font-semibold text-white mb-3">PyTorch Configuration</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">PyTorch Configuration</h3>
         <pre className="text-xs leading-relaxed mb-4">{`import torch
 
 # Detect and select device
@@ -160,7 +160,7 @@ model = MyModel().to(device)
 x = torch.randn(32, 3, 224, 224).to(device)
 y = model(x)  # runs on Metal Performance Shaders`}</pre>
 
-        <h3 className="text-lg font-semibold text-white mb-3">Workloads That Fit</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Workloads That Fit</h3>
         <div className="grid sm:grid-cols-2 gap-3 mb-4">
           {[
             ['✅ Recommended', 'Fine-tuning ≤13B models (QLoRA), RL experiments, CNN training, prototyping any architecture, running LLM inference (llama.cpp / MLX)'],
@@ -168,13 +168,13 @@ y = model(x)  # runs on Metal Performance Shaders`}</pre>
             ['❌ Avoid', 'Multi-GPU training (no NVLink equivalent), float64 heavy workloads, ops not yet ported to MPS'],
           ].map(([label, desc]) => (
             <div key={label as string} className="card">
-              <div className="text-sm font-semibold text-white mb-1">{label}</div>
-              <div className="text-xs text-slate-400">{desc}</div>
+              <div className="text-sm font-semibold text-[var(--text-primary)] mb-1">{label}</div>
+              <div className="text-xs text-[var(--text-muted)]">{desc}</div>
             </div>
           ))}
         </div>
 
-        <h3 className="text-lg font-semibold text-white mb-3">Performance Tips</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Performance Tips</h3>
         <pre className="text-xs leading-relaxed mb-4">{`# Use float32 or float16 — float64 not supported on MPS
 model = model.to(torch.float16)   # halves memory, usually fine
 
@@ -191,13 +191,13 @@ with torch.no_grad():
 # Use mlx.core instead of torch for pure inference pipelines`}</pre>
 
         <div className="card border-yellow-500/20">
-          <h3 className="font-semibold text-white mb-2">⚠️ Known Gotchas</h3>
-          <ul className="text-sm text-slate-400 space-y-1.5">
-            <li>▸ <strong className="text-white">No float64:</strong> Operations requiring float64 silently fall back to CPU. Use <code className="text-brand-300">model.double()</code> only when CPU fallback is acceptable.</li>
-            <li>▸ <strong className="text-white">Partial op support:</strong> Some complex ops (certain scatter operations, some sparse tensor ops) fall back to CPU mid-forward-pass. Profile to detect.</li>
-            <li>▸ <strong className="text-white">No torch.compile (MPS):</strong> As of PyTorch 2.3, <code className="text-brand-300">torch.compile</code> does not support the MPS backend. Skip it.</li>
-            <li>▸ <strong className="text-white">AMP with MPS:</strong> Use <code className="text-brand-300">torch.autocast("mps", dtype=torch.float16)</code> — not the CUDA variant.</li>
-            <li>▸ <strong className="text-white">Memory pressure:</strong> MPS shares memory with the OS. Close Chrome/other apps when training large models — you're competing for the same pool.</li>
+          <h3 className="font-semibold text-[var(--text-primary)] mb-2">⚠️ Known Gotchas</h3>
+          <ul className="text-sm text-[var(--text-muted)] space-y-1.5">
+            <li>▸ <strong className="text-[var(--text-primary)]">No float64:</strong> Operations requiring float64 silently fall back to CPU. Use <code className="text-brand-300">model.double()</code> only when CPU fallback is acceptable.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">Partial op support:</strong> Some complex ops (certain scatter operations, some sparse tensor ops) fall back to CPU mid-forward-pass. Profile to detect.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">No torch.compile (MPS):</strong> As of PyTorch 2.3, <code className="text-brand-300">torch.compile</code> does not support the MPS backend. Skip it.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">AMP with MPS:</strong> Use <code className="text-brand-300">torch.autocast("mps", dtype=torch.float16)</code> — not the CUDA variant.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">Memory pressure:</strong> MPS shares memory with the OS. Close Chrome/other apps when training large models — you're competing for the same pool.</li>
           </ul>
         </div>
       </section>
@@ -207,12 +207,12 @@ with torch.no_grad():
         <div className="flex items-center gap-3 mb-6">
           <span className="text-3xl">⚡</span>
           <div>
-            <h2 className="text-2xl font-bold text-white">RTX 4090 24GB</h2>
-            <p className="text-slate-400 text-sm">Ada Lovelace · CUDA 12.x · Best local GPU for the money</p>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">RTX 4090 24GB</h2>
+            <p className="text-[var(--text-muted)] text-sm">Ada Lovelace · CUDA 12.x · Best local GPU for the money</p>
           </div>
         </div>
 
-        <h3 className="text-lg font-semibold text-white mb-3">Environment Setup</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Environment Setup</h3>
         <pre className="text-xs leading-relaxed mb-4">{`# Ubuntu 22.04 recommended for RTX 4090
 
 # 1. Install CUDA Toolkit 12.1+ (match your driver version)
@@ -238,7 +238,7 @@ pip install flash-attn --no-build-isolation
 python -c "import torch; print(torch.cuda.get_device_name(0))"
 # → NVIDIA GeForce RTX 4090`}</pre>
 
-        <h3 className="text-lg font-semibold text-white mb-3">PyTorch Configuration</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">PyTorch Configuration</h3>
         <pre className="text-xs leading-relaxed mb-4">{`import torch
 from torch.cuda.amp import autocast, GradScaler
 
@@ -266,7 +266,7 @@ for batch_idx, (x, y) in enumerate(loader):
     scaler.step(optimizer)
     scaler.update()`}</pre>
 
-        <h3 className="text-lg font-semibold text-white mb-3">VRAM Budget Planning</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">VRAM Budget Planning</h3>
         <pre className="text-xs leading-relaxed mb-4">{`# Rule of thumb for transformer fine-tuning on RTX 4090 (24 GB):
 #   Model params × 4 bytes (fp32 weights)
 #   + Model params × 4 bytes (fp32 gradients)
@@ -296,7 +296,7 @@ for i, (x, y) in enumerate(loader):
         scaler.update()
         optimizer.zero_grad()`}</pre>
 
-        <h3 className="text-lg font-semibold text-white mb-3">Performance Tips</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Performance Tips</h3>
         <pre className="text-xs leading-relaxed mb-4">{`# Enable TF32 (default on Ampere+, verify it's on)
 torch.backends.cuda.matmul.allow_tf32 = True
 torch.backends.cudnn.allow_tf32 = True
@@ -318,13 +318,13 @@ loader = DataLoader(dataset, num_workers=8, pin_memory=True, prefetch_factor=2)
 watch -n 0.5 nvidia-smi --query-gpu=memory.used,memory.free,utilization.gpu --format=csv`}</pre>
 
         <div className="card border-yellow-500/20">
-          <h3 className="font-semibold text-white mb-2">⚠️ Known Gotchas</h3>
-          <ul className="text-sm text-slate-400 space-y-1.5">
-            <li>▸ <strong className="text-white">Use float16, NOT bfloat16:</strong> Ada Lovelace supports both, but fp16 tensor cores are faster. bfloat16 is preferred on A100/H100.</li>
-            <li>▸ <strong className="text-white">torch.compile warmup:</strong> First few forward passes are slow (compilation). Don't benchmark before step ~5.</li>
-            <li>▸ <strong className="text-white">Flash Attention requires contiguous memory:</strong> Ensure Q/K/V tensors are contiguous before passing to flash_attn.</li>
-            <li>▸ <strong className="text-white">CUDA OOM is not always VRAM:</strong> Sometimes it's fragmentation. Try <code className="text-brand-300">torch.cuda.empty_cache()</code> between runs in a notebook.</li>
-            <li>▸ <strong className="text-white">nvcc mismatch:</strong> PyTorch CUDA version must match the installed toolkit for custom CUDA extensions (like flash-attn).</li>
+          <h3 className="font-semibold text-[var(--text-primary)] mb-2">⚠️ Known Gotchas</h3>
+          <ul className="text-sm text-[var(--text-muted)] space-y-1.5">
+            <li>▸ <strong className="text-[var(--text-primary)]">Use float16, NOT bfloat16:</strong> Ada Lovelace supports both, but fp16 tensor cores are faster. bfloat16 is preferred on A100/H100.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">torch.compile warmup:</strong> First few forward passes are slow (compilation). Don't benchmark before step ~5.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">Flash Attention requires contiguous memory:</strong> Ensure Q/K/V tensors are contiguous before passing to flash_attn.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">CUDA OOM is not always VRAM:</strong> Sometimes it's fragmentation. Try <code className="text-brand-300">torch.cuda.empty_cache()</code> between runs in a notebook.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">nvcc mismatch:</strong> PyTorch CUDA version must match the installed toolkit for custom CUDA extensions (like flash-attn).</li>
           </ul>
         </div>
       </section>
@@ -334,14 +334,14 @@ watch -n 0.5 nvidia-smi --query-gpu=memory.used,memory.free,utilization.gpu --fo
         <div className="flex items-center gap-3 mb-6">
           <span className="text-3xl">☁️</span>
           <div>
-            <h2 className="text-2xl font-bold text-white">A100 80GB (Cloud)</h2>
-            <p className="text-slate-400 text-sm">Ampere · HBM2e · Native BF16 · Lambda Labs / RunPod</p>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">A100 80GB (Cloud)</h2>
+            <p className="text-[var(--text-muted)] text-sm">Ampere · HBM2e · Native BF16 · Lambda Labs / RunPod</p>
           </div>
         </div>
 
         <div className="card mb-4">
-          <h3 className="font-semibold text-white mb-1">A100 vs H100 — when does it matter?</h3>
-          <p className="text-sm text-slate-400">
+          <h3 className="font-semibold text-[var(--text-primary)] mb-1">A100 vs H100 — when does it matter?</h3>
+          <p className="text-sm text-[var(--text-muted)]">
             H100 SXM is 3× faster for FP8 training and has NVLink 4.0 (900 GB/s vs 600 GB/s).
             But at ~2× the price, A100 80G is the workhorse for most LLM fine-tuning jobs.
             Choose H100 only when you're training 70B+ from scratch or need maximum throughput.
@@ -349,7 +349,7 @@ watch -n 0.5 nvidia-smi --query-gpu=memory.used,memory.free,utilization.gpu --fo
           </p>
         </div>
 
-        <h3 className="text-lg font-semibold text-white mb-3">Cloud Setup (Lambda Labs)</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Cloud Setup (Lambda Labs)</h3>
         <pre className="text-xs leading-relaxed mb-4">{`# Lambda Labs: https://lambdalabs.com/service/gpu-cloud
 # Select: A100 80G SXM — ~$1.10/hr on-demand as of 2025
 
@@ -369,7 +369,7 @@ pip install flash-attn --no-build-isolation  # 5-10 min compile
 # RunPod alternative: use the "RunPod PyTorch" template
 # It ships with torch pre-compiled, saving 10-15 minutes on launch`}</pre>
 
-        <h3 className="text-lg font-semibold text-white mb-3">PyTorch Configuration — Use BF16, Not FP16</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">PyTorch Configuration — Use BF16, Not FP16</h3>
         <pre className="text-xs leading-relaxed mb-4">{`import torch
 
 device = torch.device("cuda")
@@ -398,7 +398,7 @@ for x, y in loader:
 print(torch.backends.cuda.matmul.allow_tf32)  # → True
 # TF32 uses 10-bit mantissa for matmul, full 8-bit exponent — ~10% speedup`}</pre>
 
-        <h3 className="text-lg font-semibold text-white mb-3">Workload Sizing (80GB VRAM)</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Workload Sizing (80GB VRAM)</h3>
         <pre className="text-xs leading-relaxed mb-4">{`# What fits in 80GB for fine-tuning:
 #
 # Full fine-tune (bf16):
@@ -430,12 +430,12 @@ model = AutoModelForCausalLM.from_pretrained(
 )`}</pre>
 
         <div className="card border-yellow-500/20">
-          <h3 className="font-semibold text-white mb-2">⚠️ Known Gotchas</h3>
-          <ul className="text-sm text-slate-400 space-y-1.5">
-            <li>▸ <strong className="text-white">Don't use FP16 GradScaler on A100:</strong> BF16 doesn't overflow so the scaler is unnecessary and adds complexity.</li>
-            <li>▸ <strong className="text-white">Lambda Labs billing:</strong> You're billed from instance start, not when you SSH in. Terminate (don't just stop) instances you're not using.</li>
-            <li>▸ <strong className="text-white">Persistent storage is separate:</strong> Instance disk is ephemeral on Lambda. Use Persistent Storage ($0.20/GB/mo) for checkpoints.</li>
-            <li>▸ <strong className="text-white">A100 PCIe vs SXM:</strong> A100-PCIe has 400 GB/s bandwidth; A100-SXM has 2 TB/s. For multi-GPU, always prefer SXM variants — significant impact on gradient sync.</li>
+          <h3 className="font-semibold text-[var(--text-primary)] mb-2">⚠️ Known Gotchas</h3>
+          <ul className="text-sm text-[var(--text-muted)] space-y-1.5">
+            <li>▸ <strong className="text-[var(--text-primary)]">Don't use FP16 GradScaler on A100:</strong> BF16 doesn't overflow so the scaler is unnecessary and adds complexity.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">Lambda Labs billing:</strong> You're billed from instance start, not when you SSH in. Terminate (don't just stop) instances you're not using.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">Persistent storage is separate:</strong> Instance disk is ephemeral on Lambda. Use Persistent Storage ($0.20/GB/mo) for checkpoints.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">A100 PCIe vs SXM:</strong> A100-PCIe has 400 GB/s bandwidth; A100-SXM has 2 TB/s. For multi-GPU, always prefer SXM variants — significant impact on gradient sync.</li>
           </ul>
         </div>
       </section>
@@ -445,14 +445,14 @@ model = AutoModelForCausalLM.from_pretrained(
         <div className="flex items-center gap-3 mb-6">
           <span className="text-3xl">🖥️</span>
           <div>
-            <h2 className="text-2xl font-bold text-white">8× L40S Multi-GPU Cluster</h2>
-            <p className="text-slate-400 text-sm">Ada Lovelace · 48GB × 8 · PCIe interconnect · FSDP/DDP</p>
+            <h2 className="text-2xl font-bold text-[var(--text-primary)]">8× L40S Multi-GPU Cluster</h2>
+            <p className="text-[var(--text-muted)] text-sm">Ada Lovelace · 48GB × 8 · PCIe interconnect · FSDP/DDP</p>
           </div>
         </div>
 
         <div className="card border-yellow-500/20 mb-6">
-          <h3 className="font-semibold text-white mb-2">⚠️ Critical: L40S Uses PCIe, Not NVLink</h3>
-          <p className="text-sm text-slate-400">
+          <h3 className="font-semibold text-[var(--text-primary)] mb-2">⚠️ Critical: L40S Uses PCIe, Not NVLink</h3>
+          <p className="text-sm text-[var(--text-muted)]">
             Unlike A100/H100 SXM which use NVLink (600–900 GB/s GPU-to-GPU), the L40S uses PCIe 4.0
             for inter-GPU communication (~64 GB/s bidirectional). This is ~10× less bandwidth. For
             large gradient tensors, this means all-reduce can become the bottleneck. Design your
@@ -460,13 +460,13 @@ model = AutoModelForCausalLM.from_pretrained(
           </p>
         </div>
 
-        <h3 className="text-lg font-semibold text-white mb-3">DDP vs FSDP Decision Guide</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">DDP vs FSDP Decision Guide</h3>
         <div className="overflow-x-auto rounded-xl border border-[var(--border)] mb-4">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[var(--border)]" style={{ background: 'var(--bg-card)' }}>
                 {['', 'DDP', 'FSDP'].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left text-slate-400 font-semibold">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-[var(--text-muted)] font-semibold">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -481,16 +481,16 @@ model = AutoModelForCausalLM.from_pretrained(
                 <tr key={i}
                     className="border-b border-[var(--border)]"
                     style={{ background: i % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-card)' }}>
-                  <td className="px-4 py-3 text-slate-300 font-medium">{label}</td>
-                  <td className="px-4 py-3 text-slate-400">{ddp}</td>
-                  <td className="px-4 py-3 text-slate-400">{fsdp}</td>
+                  <td className="px-4 py-3 text-[var(--text-primary)] font-medium">{label}</td>
+                  <td className="px-4 py-3 text-[var(--text-muted)]">{ddp}</td>
+                  <td className="px-4 py-3 text-[var(--text-muted)]">{fsdp}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        <h3 className="text-lg font-semibold text-white mb-3">DDP Setup</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">DDP Setup</h3>
         <pre className="text-xs leading-relaxed mb-4">{`# Launch with torchrun (replaces torch.distributed.launch)
 torchrun --nproc_per_node=8 --nnodes=1 train.py
 
@@ -523,7 +523,7 @@ for epoch in range(num_epochs):
 
 dist.destroy_process_group()`}</pre>
 
-        <h3 className="text-lg font-semibold text-white mb-3">FSDP Setup (for 70B+ models)</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">FSDP Setup (for 70B+ models)</h3>
         <pre className="text-xs leading-relaxed mb-4">{`from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
 from torch.distributed.fsdp.fully_sharded_data_parallel import (
     CPUOffload, BackwardPrefetch, MixedPrecision
@@ -551,7 +551,7 @@ fsdp_config = dict(
 )
 model = FSDP(model, **fsdp_config)`}</pre>
 
-        <h3 className="text-lg font-semibold text-white mb-3">NCCL Tuning for PCIe Topology</h3>
+        <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">NCCL Tuning for PCIe Topology</h3>
         <pre className="text-xs leading-relaxed mb-4">{`# L40S on PCIe: tune NCCL to avoid redundant copies
 export NCCL_P2P_DISABLE=0         # keep P2P enabled if NVLink exists
 export NCCL_IB_DISABLE=1          # no InfiniBand on typical cloud
@@ -573,28 +573,28 @@ import bitsandbytes as bnb
 optimizer = bnb.optim.AdamW8bit(model.parameters(), lr=2e-5)`}</pre>
 
         <div className="card border-yellow-500/20">
-          <h3 className="font-semibold text-white mb-2">⚠️ Known Gotchas</h3>
-          <ul className="text-sm text-slate-400 space-y-1.5">
-            <li>▸ <strong className="text-white">L40S ≠ NVLink:</strong> Never assume NVLink on L40S. PCIe means all-reduce is ~10× slower per-byte. Gradient accumulation (16+ steps) is your friend.</li>
-            <li>▸ <strong className="text-white">Gradient sync overhead:</strong> With large models, gradient all-reduce can take 30-50% of step time. Use <code className="text-brand-300">model.no_sync()</code> context during accumulation steps.</li>
-            <li>▸ <strong className="text-white">FSDP checkpoint saving:</strong> Must use <code className="text-brand-300">FULL_STATE_DICT</code> policy to save a consolidated checkpoint — otherwise you get 8 shards.</li>
-            <li>▸ <strong className="text-white">torchrun vs old launch:</strong> Always use <code className="text-brand-300">torchrun</code>. The old <code className="text-brand-300">-m torch.distributed.launch</code> is deprecated since PyTorch 1.9.</li>
+          <h3 className="font-semibold text-[var(--text-primary)] mb-2">⚠️ Known Gotchas</h3>
+          <ul className="text-sm text-[var(--text-muted)] space-y-1.5">
+            <li>▸ <strong className="text-[var(--text-primary)]">L40S ≠ NVLink:</strong> Never assume NVLink on L40S. PCIe means all-reduce is ~10× slower per-byte. Gradient accumulation (16+ steps) is your friend.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">Gradient sync overhead:</strong> With large models, gradient all-reduce can take 30-50% of step time. Use <code className="text-brand-300">model.no_sync()</code> context during accumulation steps.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">FSDP checkpoint saving:</strong> Must use <code className="text-brand-300">FULL_STATE_DICT</code> policy to save a consolidated checkpoint — otherwise you get 8 shards.</li>
+            <li>▸ <strong className="text-[var(--text-primary)]">torchrun vs old launch:</strong> Always use <code className="text-brand-300">torchrun</code>. The old <code className="text-brand-300">-m torch.distributed.launch</code> is deprecated since PyTorch 1.9.</li>
           </ul>
         </div>
       </section>
 
       {/* ── 6. Mixed Precision Guide ─────────────────────────────────── */}
       <section id="mixed-precision" className="mb-16 scroll-mt-20">
-        <h2 className="text-2xl font-bold text-white mb-6">Mixed Precision Guide</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">Mixed Precision Guide</h2>
 
         <div className="card mb-6">
-          <h3 className="font-semibold text-white mb-3">Decision Tree: Which Precision?</h3>
-          <div className="space-y-2 text-sm text-slate-400">
-            <p>1. <strong className="text-white">On A100/H100?</strong> → Use <code className="text-brand-300">bfloat16</code>. No GradScaler, better dynamic range, same speed.</p>
-            <p>2. <strong className="text-white">On RTX 4090 / consumer GPU?</strong> → Use <code className="text-brand-300">float16</code> with GradScaler. Better tensor core utilisation than bf16 on Ada.</p>
-            <p>3. <strong className="text-white">On M4 Pro MPS?</strong> → Use <code className="text-brand-300">float16</code> with <code className="text-brand-300">torch.autocast("mps")</code>. No GradScaler needed for most workloads.</p>
-            <p>4. <strong className="text-white">Training instability / NaN loss?</strong> → First try GradScaler if using fp16. If still unstable, switch to bf16 — its wider exponent range is more numerically stable.</p>
-            <p>5. <strong className="text-white">Inference only?</strong> → Use <code className="text-brand-300">torch.no_grad()</code> + fp16 or bf16. No scaler needed ever for inference.</p>
+          <h3 className="font-semibold text-[var(--text-primary)] mb-3">Decision Tree: Which Precision?</h3>
+          <div className="space-y-2 text-sm text-[var(--text-muted)]">
+            <p>1. <strong className="text-[var(--text-primary)]">On A100/H100?</strong> → Use <code className="text-brand-300">bfloat16</code>. No GradScaler, better dynamic range, same speed.</p>
+            <p>2. <strong className="text-[var(--text-primary)]">On RTX 4090 / consumer GPU?</strong> → Use <code className="text-brand-300">float16</code> with GradScaler. Better tensor core utilisation than bf16 on Ada.</p>
+            <p>3. <strong className="text-[var(--text-primary)]">On M4 Pro MPS?</strong> → Use <code className="text-brand-300">float16</code> with <code className="text-brand-300">torch.autocast("mps")</code>. No GradScaler needed for most workloads.</p>
+            <p>4. <strong className="text-[var(--text-primary)]">Training instability / NaN loss?</strong> → First try GradScaler if using fp16. If still unstable, switch to bf16 — its wider exponent range is more numerically stable.</p>
+            <p>5. <strong className="text-[var(--text-primary)]">Inference only?</strong> → Use <code className="text-brand-300">torch.no_grad()</code> + fp16 or bf16. No scaler needed ever for inference.</p>
           </div>
         </div>
 
@@ -626,12 +626,12 @@ for x, y in loader:
 
       {/* ── 7. Memory Optimization ──────────────────────────────────── */}
       <section id="memory-opt" className="mb-16 scroll-mt-20">
-        <h2 className="text-2xl font-bold text-white mb-6">Memory Optimization Techniques</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">Memory Optimization Techniques</h2>
 
         <div className="space-y-6">
           <div>
-            <h3 className="text-lg font-semibold text-white mb-3">Gradient Checkpointing</h3>
-            <p className="text-sm text-slate-400 mb-3">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Gradient Checkpointing</h3>
+            <p className="text-sm text-[var(--text-muted)] mb-3">
               Instead of storing all activations during the forward pass (needed for backward),
               recompute them on-the-fly during backward. Reduces activation memory by ~60%
               at the cost of ~33% longer backward pass (one extra forward per layer).
@@ -651,8 +651,8 @@ model.gradient_checkpointing_enable()
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-white mb-3">Gradient Accumulation Math</h3>
-            <p className="text-sm text-slate-400 mb-3">
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">Gradient Accumulation Math</h3>
+            <p className="text-sm text-[var(--text-muted)] mb-3">
               Simulate a larger effective batch without materialising all gradients at once.
             </p>
             <pre className="text-xs leading-relaxed">{`# Effective batch size = micro_batch_size × accumulation_steps × num_gpus
@@ -683,7 +683,7 @@ for step, (x, y) in enumerate(loader):
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-white mb-3">CPU Offloading</h3>
+            <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-3">CPU Offloading</h3>
             <pre className="text-xs leading-relaxed">{`# ZeRO-3 with CPU offload via DeepSpeed
 # Moves optimizer states + parameters to CPU RAM when not in use
 # Enables fitting models that don't fit in GPU VRAM at all
@@ -708,7 +708,7 @@ pip install deepspeed
 
       {/* ── 8. Profiling Tools ──────────────────────────────────────── */}
       <section id="profiling" className="mb-16 scroll-mt-20">
-        <h2 className="text-2xl font-bold text-white mb-6">Profiling Tools</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">Profiling Tools</h2>
 
         <div className="space-y-4">
           {[
@@ -770,7 +770,7 @@ wandb.log({
             <div key={tool} className="card">
               <div className="flex items-start gap-3 mb-3">
                 <code className="text-brand-300 text-sm font-mono shrink-0">{tool}</code>
-                <p className="text-sm text-slate-400">{desc}</p>
+                <p className="text-sm text-[var(--text-muted)]">{desc}</p>
               </div>
               <pre className="text-xs leading-relaxed">{code}</pre>
             </div>
@@ -780,13 +780,13 @@ wandb.log({
 
       {/* ── 9. Cloud Provider Comparison ────────────────────────────── */}
       <section id="cloud" className="mb-8 scroll-mt-20">
-        <h2 className="text-2xl font-bold text-white mb-6">Cloud Provider Comparison</h2>
+        <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-6">Cloud Provider Comparison</h2>
         <div className="overflow-x-auto rounded-2xl border border-[var(--border)]">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-[var(--border)]" style={{ background: 'var(--bg-card)' }}>
                 {['Provider', 'GPUs Available', 'On-Demand', 'Spot', 'Notes'].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left text-slate-400 font-semibold whitespace-nowrap">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-[var(--text-muted)] font-semibold whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -795,17 +795,17 @@ wandb.log({
                 <tr key={p.name}
                     className="border-b border-[var(--border)] hover:bg-white/5 transition-colors"
                     style={{ background: i % 2 === 0 ? 'var(--bg-secondary)' : 'var(--bg-card)' }}>
-                  <td className="px-4 py-3 font-semibold text-white whitespace-nowrap">{p.name}</td>
-                  <td className="px-4 py-3 text-slate-300 whitespace-nowrap">{p.gpus}</td>
-                  <td className="px-4 py-3 text-slate-300 whitespace-nowrap">{p.on_demand}</td>
-                  <td className="px-4 py-3 text-slate-300 whitespace-nowrap">{p.spot}</td>
-                  <td className="px-4 py-3 text-slate-400">{p.notes}</td>
+                  <td className="px-4 py-3 font-semibold text-[var(--text-primary)] whitespace-nowrap">{p.name}</td>
+                  <td className="px-4 py-3 text-[var(--text-primary)] whitespace-nowrap">{p.gpus}</td>
+                  <td className="px-4 py-3 text-[var(--text-primary)] whitespace-nowrap">{p.on_demand}</td>
+                  <td className="px-4 py-3 text-[var(--text-primary)] whitespace-nowrap">{p.spot}</td>
+                  <td className="px-4 py-3 text-[var(--text-muted)]">{p.notes}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className="text-xs text-slate-500 mt-3">
+        <p className="text-xs text-[var(--text-muted)] mt-3">
           Prices as of 2025 — verify current rates before committing to long runs.
           Always set a budget alert. An 8×A100 left running overnight is ~$200.
         </p>

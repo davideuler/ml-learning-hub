@@ -54,10 +54,10 @@ const HARDWARE_ROWS = [
 export default function MiniGPTPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <nav className="text-sm text-slate-500 mb-8">
-        <Link href="/projects" className="hover:text-slate-300">Projects</Link>
+      <nav className="text-sm text-[var(--text-muted)] mb-8">
+        <Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link>
         <span className="mx-2">/</span>
-        <span className="text-white">Mini-GPT</span>
+        <span className="text-[var(--text-primary)]">Mini-GPT</span>
       </nav>
 
       <div className="flex items-start gap-4 mb-4">
@@ -67,19 +67,19 @@ export default function MiniGPTPage() {
             <span className="badge badge-purple">Transformers</span>
             <span className="badge badge-blue">Intermediate</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white">Mini-GPT (Shakespeare)</h1>
+          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">Mini-GPT (Shakespeare)</h1>
         </div>
       </div>
 
-      <p className="text-slate-400 mb-8">
+      <p className="text-[var(--text-muted)] mb-8">
         Implement a character-level GPT — every single component from scratch in PyTorch.
         No Hugging Face for the model itself. Train on Shakespeare's complete works and watch
         it generate vaguely Elizabethan text.
       </p>
 
       <div className="card mb-10">
-        <h2 className="font-bold text-white mb-3">What you learn</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>▸ How token embeddings, positional information, and masked attention fit together</li>
           <li>▸ Why pre-norm residual blocks are easier to train than naive transformer stacks</li>
           <li>▸ How sampling strategy changes perceived model quality, even with the same checkpoint</li>
@@ -97,16 +97,16 @@ export default function MiniGPTPage() {
           { k: 'Train time',v: '~20–30 min' },
         ].map(({ k, v }) => (
           <div key={k} className="card text-center py-3">
-            <div className="text-sm text-slate-500">{k}</div>
-            <div className="font-bold text-white mt-1">{v}</div>
+            <div className="text-sm text-[var(--text-muted)]">{k}</div>
+            <div className="font-bold text-[var(--text-primary)] mt-1">{v}</div>
           </div>
         ))}
       </div>
 
       {/* Starter code snippet */}
       <div className="mb-10">
-        <h2 className="text-xl font-bold text-white mb-4">Starter Architecture Sketch</h2>
-        <pre className="text-xs leading-relaxed overflow-x-auto rounded-xl p-4 bg-slate-900 border border-slate-700">{`import torch
+        <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Architecture Sketch</h2>
+        <pre className="text-xs leading-relaxed overflow-x-auto rounded-xl p-4 bg-[var(--code-bg)] border border-[var(--border)]">{`import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
@@ -140,7 +140,7 @@ class CausalSelfAttention(nn.Module):
       </div>
 
       {/* Steps */}
-      <h2 className="text-xl font-bold text-white mb-6">Build Steps</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Build Steps</h2>
       <div className="space-y-4">
         {STEPS.map((s) => (
           <div key={s.n} className="card flex gap-4">
@@ -148,38 +148,38 @@ class CausalSelfAttention(nn.Module):
               {s.n}
             </span>
             <div>
-              <h3 className="font-semibold text-white">{s.title}</h3>
-              <p className="text-sm text-slate-400 mt-1">{s.body}</p>
+              <h3 className="font-semibold text-[var(--text-primary)]">{s.title}</h3>
+              <p className="text-sm text-[var(--text-muted)] mt-1">{s.body}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4 mt-12">Common Pitfalls</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 mt-12">Common Pitfalls</h2>
       <div className="space-y-3 mb-12">
         {PITFALLS.map((p) => (
           <div key={p.title} className="card border-yellow-500/20">
             <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
-            <p className="text-xs text-slate-400">{p.body}</p>
+            <p className="text-xs text-[var(--text-muted)]">{p.body}</p>
           </div>
         ))}
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4">Hardware Comparison</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Hardware Comparison</h2>
       <div className="overflow-x-auto mb-10">
-        <table className="w-full text-xs text-slate-400 border-collapse">
+        <table className="w-full text-xs text-[var(--text-muted)] border-collapse">
           <thead>
-            <tr className="border-b border-slate-700">
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Hardware</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Base train run</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Longer context</th>
-              <th className="text-left py-2 text-slate-300 font-semibold">Ablation sweeps</th>
+            <tr className="border-b border-[var(--border)]">
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Hardware</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Base train run</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Longer context</th>
+              <th className="text-left py-2 text-[var(--text-primary)] font-semibold">Ablation sweeps</th>
             </tr>
           </thead>
           <tbody>
             {HARDWARE_ROWS.map((r) => (
-              <tr key={r.hw} className="border-b border-slate-800">
-                <td className="py-2 pr-4 text-white font-medium">{r.hw}</td>
+              <tr key={r.hw} className="border-b border-[var(--border)]">
+                <td className="py-2 pr-4 text-[var(--text-primary)] font-medium">{r.hw}</td>
                 <td className="py-2 pr-4">{r.train}</td>
                 <td className="py-2 pr-4">{r.longer_ctx}</td>
                 <td className="py-2">{r.sweeps}</td>
@@ -191,8 +191,8 @@ class CausalSelfAttention(nn.Module):
 
       {/* Rubric */}
       <div className="mt-10 card">
-        <h2 className="font-bold text-white mb-3">Grading Rubric</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Grading Rubric</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>✅ Model trains without NaN losses</li>
           <li>✅ Validation loss decreases monotonically for 1000 steps</li>
           <li>✅ Generated text passes the &quot;Shakespeare vibe check&quot; (coherent words)</li>

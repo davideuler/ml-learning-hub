@@ -70,10 +70,10 @@ const HARDWARE_ROWS = [
 export default function CNNClassifierPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <nav className="text-sm text-slate-500 mb-8">
-        <Link href="/projects" className="hover:text-slate-300">Projects</Link>
+      <nav className="text-sm text-[var(--text-muted)] mb-8">
+        <Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link>
         <span className="mx-2">/</span>
-        <span className="text-white">CNN Classifier</span>
+        <span className="text-[var(--text-primary)]">CNN Classifier</span>
       </nav>
 
       <div className="flex items-start gap-4 mb-4">
@@ -83,11 +83,11 @@ export default function CNNClassifierPage() {
             <span className="badge badge-blue">PyTorch</span>
             <span className="badge badge-green">Beginner</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white">CNN Image Classifier</h1>
+          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">CNN Image Classifier</h1>
         </div>
       </div>
 
-      <p className="text-slate-400 mb-8">
+      <p className="text-[var(--text-muted)] mb-8">
         Build a ResNet-18-style convolutional neural network entirely from scratch.
         Train it on CIFAR-10, track metrics with TensorBoard, and target &gt;90% validation accuracy.
         This is the canonical PyTorch project that verifies you understand every moving part.
@@ -101,15 +101,15 @@ export default function CNNClassifierPage() {
           { k: 'Train time', v: '~15 min' },
         ].map(({ k, v }) => (
           <div key={k} className="card text-center py-3">
-            <div className="text-sm text-slate-500">{k}</div>
-            <div className="font-bold text-white mt-1">{v}</div>
+            <div className="text-sm text-[var(--text-muted)]">{k}</div>
+            <div className="font-bold text-[var(--text-primary)] mt-1">{v}</div>
           </div>
         ))}
       </div>
 
       <div className="card mb-10">
-        <h2 className="font-bold text-white mb-3">What you learn</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>▸ How residual connections solve the vanishing gradient problem at depth</li>
           <li>▸ Data augmentation strategies and their effect on generalisation</li>
           <li>▸ Mixed-precision training with torch.amp and when it helps vs. hurts</li>
@@ -119,12 +119,12 @@ export default function CNNClassifierPage() {
       </div>
 
       {/* Starter Code */}
-      <h2 className="text-xl font-bold text-white mb-4">Starter Code: ResBlock &amp; Training Scaffold</h2>
-      <p className="text-sm text-slate-400 mb-4">
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code: ResBlock &amp; Training Scaffold</h2>
+      <p className="text-sm text-[var(--text-muted)] mb-4">
         The ResBlock below is complete. Your job: implement <code className="text-brand-300">ResNet</code>,
         wire up the DataLoaders with augmentation, write the training loop, and add logging.
       </p>
-      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-slate-900 border border-slate-700">{`import torch
+      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-[var(--code-bg)] border border-[var(--border)]">{`import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
@@ -235,46 +235,46 @@ def evaluate() -> float:
 `}</pre>
 
       {/* Build Steps */}
-      <h2 className="text-xl font-bold text-white mb-6">Build Steps</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Build Steps</h2>
       <div className="space-y-4 mb-12">
         {STEPS.map((step, idx) => (
           <div key={step.title} className="card flex gap-4">
             <span className="text-2xl font-extrabold text-brand-400/40 font-mono w-8 shrink-0">{idx + 1}</span>
             <div>
-              <h3 className="font-semibold text-white">{step.title}</h3>
-              <p className="text-sm text-slate-400 mt-1">{step.body}</p>
+              <h3 className="font-semibold text-[var(--text-primary)]">{step.title}</h3>
+              <p className="text-sm text-[var(--text-muted)] mt-1">{step.body}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Pitfalls */}
-      <h2 className="text-xl font-bold text-white mb-4">Common Pitfalls</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Common Pitfalls</h2>
       <div className="space-y-3 mb-12">
         {PITFALLS.map((p) => (
           <div key={p.title} className="card border-yellow-500/20">
             <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
-            <p className="text-xs text-slate-400">{p.body}</p>
+            <p className="text-xs text-[var(--text-muted)]">{p.body}</p>
           </div>
         ))}
       </div>
 
       {/* Hardware Table */}
-      <h2 className="text-xl font-bold text-white mb-4">Hardware Comparison</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Hardware Comparison</h2>
       <div className="overflow-x-auto mb-10">
-        <table className="w-full text-xs text-slate-400 border-collapse">
+        <table className="w-full text-xs text-[var(--text-muted)] border-collapse">
           <thead>
-            <tr className="border-b border-slate-700">
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Hardware</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">CIFAR-10 (1 run)</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Augmentation sweep</th>
-              <th className="text-left py-2 text-slate-300 font-semibold">Multi-seed (5×)</th>
+            <tr className="border-b border-[var(--border)]">
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Hardware</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">CIFAR-10 (1 run)</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Augmentation sweep</th>
+              <th className="text-left py-2 text-[var(--text-primary)] font-semibold">Multi-seed (5×)</th>
             </tr>
           </thead>
           <tbody>
             {HARDWARE_ROWS.map((r) => (
-              <tr key={r.hw} className="border-b border-slate-800">
-                <td className="py-2 pr-4 text-white font-medium">{r.hw}</td>
+              <tr key={r.hw} className="border-b border-[var(--border)]">
+                <td className="py-2 pr-4 text-[var(--text-primary)] font-medium">{r.hw}</td>
                 <td className="py-2 pr-4">{r.cifar10}</td>
                 <td className="py-2 pr-4">{r.aug_sweep}</td>
                 <td className="py-2">{r.multi_seed}</td>
@@ -286,8 +286,8 @@ def evaluate() -> float:
 
       {/* Success Criteria */}
       <div className="card">
-        <h2 className="font-bold text-white mb-3">Success Criteria</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>✅ Trains to convergence without NaN or divergence</li>
           <li>✅ Validation accuracy ≥ 88% (passes), ≥ 91% (excellent)</li>
           <li>✅ TensorBoard shows loss + accuracy curves for both splits</li>

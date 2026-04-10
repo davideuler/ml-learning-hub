@@ -63,10 +63,10 @@ const HARDWARE_ROWS = [
 export default function BERTFinetunePage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <nav className="text-sm text-slate-500 mb-8">
-        <Link href="/projects" className="hover:text-slate-300">Projects</Link>
+      <nav className="text-sm text-[var(--text-muted)] mb-8">
+        <Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link>
         <span className="mx-2">/</span>
-        <span className="text-white">BERT Fine-tune</span>
+        <span className="text-[var(--text-primary)]">BERT Fine-tune</span>
       </nav>
 
       <div className="flex items-start gap-4 mb-4">
@@ -76,11 +76,11 @@ export default function BERTFinetunePage() {
             <span className="badge badge-purple">Transformers</span>
             <span className="badge badge-blue">Intermediate</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white">BERT Sentiment Fine-tune</h1>
+          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">BERT Sentiment Fine-tune</h1>
         </div>
       </div>
 
-      <p className="text-slate-400 mb-8">
+      <p className="text-[var(--text-muted)] mb-8">
         Fine-tune <code className="text-brand-300">bert-base-uncased</code> on SST-2 sentiment classification
         using Hugging Face Trainer. Includes a LoRA adapter branch so you can compare full fine-tuning
         against parameter-efficient fine-tuning under different hardware budgets.
@@ -93,15 +93,15 @@ export default function BERTFinetunePage() {
           { k: 'Hardware', v: 'M4 / 4090' },
         ].map(({ k, v }) => (
           <div key={k} className="card text-center py-3">
-            <div className="text-sm text-slate-500">{k}</div>
-            <div className="font-bold text-white mt-1">{v}</div>
+            <div className="text-sm text-[var(--text-muted)]">{k}</div>
+            <div className="font-bold text-[var(--text-primary)] mt-1">{v}</div>
           </div>
         ))}
       </div>
 
       <div className="card mb-10">
-        <h2 className="font-bold text-white mb-3">What you learn</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>▸ The difference between using a pre-trained encoder and training from scratch</li>
           <li>▸ How classification heads sit on top of [CLS] representations</li>
           <li>▸ How LoRA changes trainable parameter count, VRAM budget, and iteration speed</li>
@@ -110,8 +110,8 @@ export default function BERTFinetunePage() {
         </ul>
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4">Starter Code: Trainer + LoRA Scaffold</h2>
-      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-slate-900 border border-slate-700">{`from datasets import load_dataset
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code: Trainer + LoRA Scaffold</h2>
+      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-[var(--code-bg)] border border-[var(--border)]">{`from datasets import load_dataset
 from transformers import (
     AutoTokenizer,
     AutoModelForSequenceClassification,
@@ -169,8 +169,8 @@ trainer = Trainer(
 trainer.train()`}</pre>
 
       <div className="card">
-        <h2 className="font-bold text-white mb-3">Key Concepts</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Key Concepts</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>▸ Tokenization with AutoTokenizer</li>
           <li>▸ Classification head on [CLS] token</li>
           <li>▸ Differential LR (lower for pre-trained layers)</li>
@@ -183,38 +183,38 @@ trainer.train()`}</pre>
           <div key={step.title} className="card flex gap-4">
             <span className="text-2xl font-extrabold text-purple-400/40 font-mono w-8 shrink-0">{idx + 1}</span>
             <div>
-              <h3 className="font-semibold text-white">{step.title}</h3>
-              <p className="text-sm text-slate-400 mt-1">{step.body}</p>
+              <h3 className="font-semibold text-[var(--text-primary)]">{step.title}</h3>
+              <p className="text-sm text-[var(--text-muted)] mt-1">{step.body}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4 mt-12">Common Pitfalls</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4 mt-12">Common Pitfalls</h2>
       <div className="space-y-3 mb-12">
         {PITFALLS.map((p) => (
           <div key={p.title} className="card border-yellow-500/20">
             <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
-            <p className="text-xs text-slate-400">{p.body}</p>
+            <p className="text-xs text-[var(--text-muted)]">{p.body}</p>
           </div>
         ))}
       </div>
 
-      <h2 className="text-xl font-bold text-white mb-4">Hardware Comparison</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Hardware Comparison</h2>
       <div className="overflow-x-auto mb-10">
-        <table className="w-full text-xs text-slate-400 border-collapse">
+        <table className="w-full text-xs text-[var(--text-muted)] border-collapse">
           <thead>
-            <tr className="border-b border-slate-700">
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Hardware</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Full fine-tune</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">LoRA run</th>
-              <th className="text-left py-2 text-slate-300 font-semibold">Multi-task experiments</th>
+            <tr className="border-b border-[var(--border)]">
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Hardware</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Full fine-tune</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">LoRA run</th>
+              <th className="text-left py-2 text-[var(--text-primary)] font-semibold">Multi-task experiments</th>
             </tr>
           </thead>
           <tbody>
             {HARDWARE_ROWS.map((r) => (
-              <tr key={r.hw} className="border-b border-slate-800">
-                <td className="py-2 pr-4 text-white font-medium">{r.hw}</td>
+              <tr key={r.hw} className="border-b border-[var(--border)]">
+                <td className="py-2 pr-4 text-[var(--text-primary)] font-medium">{r.hw}</td>
                 <td className="py-2 pr-4">{r.full_ft}</td>
                 <td className="py-2 pr-4">{r.lora}</td>
                 <td className="py-2">{r.multitask}</td>
@@ -225,8 +225,8 @@ trainer.train()`}</pre>
       </div>
 
       <div className="card">
-        <h2 className="font-bold text-white mb-3">Success Criteria</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>✅ Validation accuracy ≥ 93% with a reproducible seed and config</li>
           <li>✅ Full fine-tune and LoRA runs are compared under matched settings</li>
           <li>✅ At least 20 failure cases are manually reviewed and categorized</li>

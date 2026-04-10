@@ -52,10 +52,10 @@ const HARDWARE_ROWS = [
 export default function PPOMuJoCoPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
-      <nav className="text-sm text-slate-500 mb-8">
-        <Link href="/projects" className="hover:text-slate-300">Projects</Link>
+      <nav className="text-sm text-[var(--text-muted)] mb-8">
+        <Link href="/projects" className="hover:text-[var(--text-primary)]">Projects</Link>
         <span className="mx-2">/</span>
-        <span className="text-white">PPO MuJoCo</span>
+        <span className="text-[var(--text-primary)]">PPO MuJoCo</span>
       </nav>
 
       <div className="flex items-start gap-4 mb-4">
@@ -65,11 +65,11 @@ export default function PPOMuJoCoPage() {
             <span className="badge badge-orange">RL</span>
             <span className="badge badge-purple">Advanced</span>
           </div>
-          <h1 className="text-3xl font-extrabold text-white">PPO MuJoCo HalfCheetah</h1>
+          <h1 className="text-3xl font-extrabold text-[var(--text-primary)]">PPO MuJoCo HalfCheetah</h1>
         </div>
       </div>
 
-      <p className="text-slate-400 mb-8">
+      <p className="text-[var(--text-muted)] mb-8">
         Full PPO from scratch — clip objective, GAE, entropy bonus, observation normalisation.
         Train a HalfCheetah-v4 agent to reach 5k+ cumulative reward, then compare your implementation against
         a Tianshou-powered baseline to understand both the fundamentals and the engineering abstractions.
@@ -83,16 +83,16 @@ export default function PPOMuJoCoPage() {
           { k: 'Hardware',    v: '4090 / A100' },
         ].map(({ k, v }) => (
           <div key={k} className="card text-center py-3">
-            <div className="text-sm text-slate-500">{k}</div>
-            <div className="font-bold text-white mt-1">{v}</div>
+            <div className="text-sm text-[var(--text-muted)]">{k}</div>
+            <div className="font-bold text-[var(--text-primary)] mt-1">{v}</div>
           </div>
         ))}
       </div>
 
       {/* PPO Checklist */}
       <div className="card mb-10">
-        <h2 className="font-bold text-white mb-3">PPO Implementation Checklist</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">PPO Implementation Checklist</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>✅ Actor-Critic with shared MLP trunk (optional) and separate heads</li>
           <li>✅ Gaussian policy with learned log-std parameter</li>
           <li>✅ Orthogonal initialisation (gain=√2 for hidden, 0.01 for policy head)</li>
@@ -109,12 +109,12 @@ export default function PPOMuJoCoPage() {
       </div>
 
       {/* Starter Code */}
-      <h2 className="text-xl font-bold text-white mb-4">Starter Code</h2>
-      <p className="text-sm text-slate-400 mb-4">
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Starter Code</h2>
+      <p className="text-sm text-[var(--text-muted)] mb-4">
         This skeleton provides the actor-critic network, GAE computation, and the training loop frame.
         Fill in the clipped PPO loss, value loss, and entropy bonus inside <code className="text-orange-300">ppo_update()</code>.
       </p>
-      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-slate-900 border border-slate-700">{`# ppo_mujoco.py  — skeleton to complete
+      <pre className="text-xs leading-relaxed overflow-x-auto mb-10 rounded-xl p-4 bg-[var(--code-bg)] border border-[var(--border)]">{`# ppo_mujoco.py  — skeleton to complete
 import torch
 import torch.nn as nn
 from torch.distributions import Normal
@@ -271,34 +271,34 @@ if __name__ == "__main__":
 `}</pre>
 
       {/* Build Steps */}
-      <h2 className="text-xl font-bold text-white mb-6">Build Steps</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-6">Build Steps</h2>
       <div className="space-y-4 mb-12">
         {STEPS.map((step, idx) => (
           <div key={step.title} className="card flex gap-4">
             <span className="text-2xl font-extrabold text-orange-400/40 font-mono w-8 shrink-0">{idx + 1}</span>
             <div>
-              <h3 className="font-semibold text-white">{step.title}</h3>
-              <p className="text-sm text-slate-400 mt-1">{step.body}</p>
+              <h3 className="font-semibold text-[var(--text-primary)]">{step.title}</h3>
+              <p className="text-sm text-[var(--text-muted)] mt-1">{step.body}</p>
             </div>
           </div>
         ))}
       </div>
 
       {/* Pitfalls */}
-      <h2 className="text-xl font-bold text-white mb-4">Common Pitfalls</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Common Pitfalls</h2>
       <div className="space-y-3 mb-12">
         {PITFALLS.map((p) => (
           <div key={p.title} className="card border-yellow-500/20">
             <p className="text-sm font-semibold text-yellow-400 mb-1">⚠️ {p.title}</p>
-            <p className="text-xs text-slate-400">{p.body}</p>
+            <p className="text-xs text-[var(--text-muted)]">{p.body}</p>
           </div>
         ))}
       </div>
 
       {/* Grading */}
       <div className="card mb-8">
-        <h2 className="font-bold text-white mb-3">Success Criteria</h2>
-        <ul className="text-sm space-y-2 text-slate-400">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria</h2>
+        <ul className="text-sm space-y-2 text-[var(--text-muted)]">
           <li>✅ No NaN losses during first 500k steps</li>
           <li>✅ Episode reward ≥ 1000 after 1M steps</li>
           <li>✅ Episode reward ≥ 5000 after 5M steps</li>
@@ -310,22 +310,22 @@ if __name__ == "__main__":
       </div>
 
       {/* Hardware Table */}
-      <h2 className="text-xl font-bold text-white mb-4">Hardware Comparison</h2>
+      <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Hardware Comparison</h2>
       <div className="overflow-x-auto mb-10">
-        <table className="w-full text-xs text-slate-400 border-collapse">
+        <table className="w-full text-xs text-[var(--text-muted)] border-collapse">
           <thead>
-            <tr className="border-b border-slate-700">
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Hardware</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Verdict</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">5M steps</th>
-              <th className="text-left py-2 pr-4 text-slate-300 font-semibold">Multi-seed</th>
-              <th className="text-left py-2 text-slate-300 font-semibold">HP Sweep</th>
+            <tr className="border-b border-[var(--border)]">
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Hardware</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Verdict</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">5M steps</th>
+              <th className="text-left py-2 pr-4 text-[var(--text-primary)] font-semibold">Multi-seed</th>
+              <th className="text-left py-2 text-[var(--text-primary)] font-semibold">HP Sweep</th>
             </tr>
           </thead>
           <tbody>
             {HARDWARE_ROWS.map((r) => (
-              <tr key={r.hw} className="border-b border-slate-800">
-                <td className="py-2 pr-4 text-white font-medium">{r.hw}</td>
+              <tr key={r.hw} className="border-b border-[var(--border)]">
+                <td className="py-2 pr-4 text-[var(--text-primary)] font-medium">{r.hw}</td>
                 <td className="py-2 pr-4">{r.verdict}</td>
                 <td className="py-2 pr-4">{r.halfcheetah}</td>
                 <td className="py-2 pr-4">{r.multi_seed}</td>
@@ -337,11 +337,11 @@ if __name__ == "__main__":
       </div>
 
       <div className="card border-orange-500/30">
-        <p className="text-sm text-slate-400">
-          <strong className="text-white">Prerequisite:</strong> Complete the{' '}
+        <p className="text-sm text-[var(--text-muted)]">
+          <strong className="text-[var(--text-primary)]">Prerequisite:</strong> Complete the{' '}
           <Link href="/courses/reinforcement-learning" className="text-brand-300 hover:underline">RL course</Link>{' '}
           through Module 8 (PPO theory) before starting this project. Read the original{' '}
-          <span className="text-white">Schulman et al. 2017</span> paper alongside — the math section on the
+          <span className="text-[var(--text-primary)]">Schulman et al. 2017</span> paper alongside — the math section on the
           course page maps directly to every component here.
         </p>
       </div>
