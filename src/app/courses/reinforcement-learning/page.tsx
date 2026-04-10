@@ -15,7 +15,9 @@ const MODULES = [
   { id: 6, title: 'Policy Gradient (REINFORCE)',     desc: 'Log-derivative trick, baseline subtraction, variance reduction.' },
   { id: 7, title: 'Actor-Critic (A2C)',              desc: 'Advantage function, shared networks, n-step returns.' },
   { id: 8, title: 'Proximal Policy Optimization',   desc: 'Clip objective, GAE, entropy regularization, PPO in ~200 lines.' },
-  { id: 9, title: 'Capstone: PPO MuJoCo Agent',     desc: 'Train a HalfCheetah-v4 agent from scratch with full PPO.', isCapstone: true },
+  { id: 9, title: 'RL Engineering with Tianshou',   desc: 'Policies, collectors, vector replay buffers, trainer abstractions, and logger hooks.' },
+  { id: 10, title: 'Project: Tianshou CartPole Pipeline', desc: 'Package DQN training with Tianshou into a configurable experiment workflow.' },
+  { id: 11, title: 'Capstone: PPO MuJoCo Agent',     desc: 'Train a HalfCheetah-v4 agent from scratch, then compare against a library-based implementation.', isCapstone: true },
 ];
 
 export default function RLPage() {
@@ -36,14 +38,14 @@ export default function RLPage() {
       </div>
 
       <p className="text-slate-400 text-lg mb-4 max-w-2xl">
-        From Markov chains to PPO in 9 modules. All agents implemented in clean PyTorch;
-        all environments via Gymnasium.
+        From Markov chains to PPO and Tianshou in 11 modules. You first implement core agents by hand,
+        then learn how to scale experiments with a real RL library instead of ad hoc scripts.
       </p>
 
       <div className="flex gap-6 text-sm text-slate-500 mb-12">
-        <span>⏱ ~28 hours</span>
-        <span>📦 9 modules</span>
-        <span>🐍 PyTorch 2.x, Gymnasium 0.29+</span>
+        <span>⏱ ~34 hours</span>
+        <span>📦 11 modules</span>
+        <span>🐍 PyTorch 2.x, Gymnasium 0.29+, Tianshou</span>
       </div>
 
       <div className="card mb-10">
@@ -51,7 +53,17 @@ export default function RLPage() {
         <ul className="text-sm text-slate-400 space-y-1">
           <li>▸ PyTorch Foundations (training loops, nn.Module)</li>
           <li>▸ Probability basics (expectation, conditional probability)</li>
+          <li>▸ Comfort reading small research papers and library docs</li>
         </ul>
+      </div>
+
+      <div className="card mb-10">
+        <h2 className="font-semibold text-white mb-2">Why Tianshou matters</h2>
+        <p className="text-sm text-slate-400">
+          Hand-written RL code teaches fundamentals. Tianshou teaches how to run repeatable experiments,
+          swap policies without rewriting everything, and structure collectors, buffers, and trainers the
+          way an engineering team actually would.
+        </p>
       </div>
 
       <h2 className="text-2xl font-bold text-white mb-6">Modules</h2>
@@ -79,13 +91,20 @@ export default function RLPage() {
         <h3 className="text-lg font-bold text-white mb-2">🏁 Capstone: PPO MuJoCo Agent</h3>
         <p className="text-slate-400 text-sm mb-4">
           Implement full PPO (clip + GAE) and train a HalfCheetah-v4 agent to run forward.
-          Includes wandb logging, video rendering, and performance profiling.
+          Then compare your hand-built trainer against a library-led workflow so you understand both fundamentals and scale.
         </p>
-        <Link href="/projects/ppo-mujoco"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-600 hover:bg-orange-500
-                         text-white text-sm font-semibold transition-colors">
-          View Project Guide →
-        </Link>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/projects/ppo-mujoco"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-600 hover:bg-orange-500
+                           text-white text-sm font-semibold transition-colors">
+            View PPO Guide →
+          </Link>
+          <Link href="/projects/tianshou-cartpole"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-orange-500/40 hover:border-orange-400
+                           text-orange-200 text-sm font-semibold transition-colors">
+            View Tianshou Project →
+          </Link>
+        </div>
       </div>
     </div>
   );

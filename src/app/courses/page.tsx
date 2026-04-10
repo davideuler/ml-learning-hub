@@ -33,9 +33,9 @@ const COURSES = [
     title: 'Reinforcement Learning',
     level: 'Intermediate',
     badge: 'badge-orange',
-    hours: '~28 hrs',
-    modules: 9,
-    desc: 'From Markov decision processes to Proximal Policy Optimization — all in PyTorch + Gymnasium.',
+    hours: '~34 hrs',
+    modules: 11,
+    desc: 'From Markov decision processes to PPO and Tianshou engineering workflows, all in PyTorch + Gymnasium.',
   },
 ];
 

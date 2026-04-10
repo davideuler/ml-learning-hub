@@ -72,6 +72,7 @@ const PHASES: Phase[] = [
       { label: 'Q-learning & DQN' },
       { label: 'Policy gradient (REINFORCE)' },
       { label: 'Actor-Critic (A2C, PPO)' },
+      { label: 'RL libraries: Tianshou experiment pipeline', href: '/projects/tianshou-cartpole' },
       { label: 'Gymnasium / MuJoCo environments' },
       { label: 'Project: DQN for Atari Pong', href: '/projects/dqn-pong' },
       { label: 'Project: PPO MuJoCo agent', href: '/projects/ppo-mujoco' },

@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Projects',
-  description: 'Hands-on ML projects: CNN classifiers, Mini-GPT, DQN, PPO, and more.',
+  description: 'Hands-on ML projects: CNN classifiers, Mini-GPT, BERT, DQN, PPO, Tianshou, and inference systems.',
 };
 
 const PROJECTS = [
@@ -61,6 +61,17 @@ const PROJECTS = [
     time: '12–18 hrs',
     desc: 'PPO + GAE implementation. Train HalfCheetah-v4 agent. Includes W&B logging + video recording.',
     tags: ['PPO', 'MuJoCo', 'Actor-Critic'],
+  },
+  {
+    slug: 'tianshou-cartpole',
+    icon: '🧰',
+    title: 'Tianshou CartPole Pipeline',
+    track: 'RL',
+    badge: 'badge-orange',
+    difficulty: 'Intermediate',
+    time: '6–8 hrs',
+    desc: 'Use Tianshou to build a reusable RL training pipeline with Collector, VectorReplayBuffer, and off-policy trainers.',
+    tags: ['Tianshou', 'CartPole', 'RL Library'],
   },
   {
     slug: 'inference-server',

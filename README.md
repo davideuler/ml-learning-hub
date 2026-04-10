@@ -14,14 +14,15 @@ PyTorch · Transformers · Reinforcement Learning
 | `/courses` | Three tracks: PyTorch Foundations, Transformers, RL |
 | `/courses/pytorch-foundations` | 8-module PyTorch course |
 | `/courses/transformer-deep-dive` | 10-module Transformer course |
-| `/courses/reinforcement-learning` | 9-module RL course |
+| `/courses/reinforcement-learning` | 11-module RL course, including Tianshou workflow |
 | `/projects` | 6 project cards |
 | `/projects/cnn-classifier` | Full CNN build guide with starter code |
 | `/projects/mini-gpt` | Full GPT build guide with starter code |
-| `/projects/bert-finetune` | BERT fine-tuning stub |
-| `/projects/dqn-pong` | DQN Pong stub |
-| `/projects/ppo-mujoco` | PPO MuJoCo stub |
-| `/projects/inference-server` | FastAPI inference server stub |
+| `/projects/bert-finetune` | Full BERT fine-tuning project guide |
+| `/projects/dqn-pong` | Full DQN Pong project guide |
+| `/projects/ppo-mujoco` | Full PPO MuJoCo project guide |
+| `/projects/tianshou-cartpole` | Tianshou-based RL engineering project |
+| `/projects/inference-server` | Full FastAPI inference server guide |
 | `/math` | Linear algebra, calculus, probability, info theory |
 | `/hardware` | GPU guide, cloud providers, AMP, DDP, profiling |
 
@@ -109,7 +110,7 @@ src/
 
 - [ ] **v0.2**: Full MDX rendering for course/project pages (replace static TSX)
 - [ ] **v0.2**: KaTeX math in MDX pages (CSS import + `@tailwindcss/typography`)
-- [ ] **v0.2**: Complete project guides for DQN, PPO, BERT, inference server
+- [ ] **v0.2**: Add Tianshou code snippets and config files for the RL library project
 - [ ] **v0.3**: Search (Algolia DocSearch or Pagefind)
 - [ ] **v0.3**: Progress tracking (localStorage)
 - [ ] **v0.3**: Code sandbox integration (Stackblitz embeds)
