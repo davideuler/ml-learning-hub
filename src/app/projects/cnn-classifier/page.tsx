@@ -66,6 +66,16 @@ export default function CNNClassifierPage() {
         ))}
       </div>
 
+      <div className="card mb-8">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Project Background / 项目背景</h2>
+        <p className="text-sm text-[var(--text-muted)] leading-relaxed">CNN image classification is one of the cleanest entry points into modern deep learning engineering. It sits at the intersection of data pipelines, model architecture, optimization, evaluation, and export, so it is the perfect place to learn how all the moving parts of training actually fit together. <br />CNN 图像分类是进入现代深度学习工程最干净的入口之一。它正好处在数据管线、模型结构、优化、评估和导出这些核心问题的交叉点上，因此非常适合用来理解完整训练系统是怎样协同工作的。</p>
+      </div>
+
+      <div className="card mb-8">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Problem it solves / 它要解决什么问题</h2>
+        <p className="text-sm text-[var(--text-muted)] leading-relaxed">The direct task is image classification on CIFAR-10, but the deeper problem is learning how a model turns pixels into layered visual features and how an engineering pipeline turns that model into a reliable training workflow. This page is really about making vision training legible, not just chasing one accuracy number. <br />直接任务当然是在 CIFAR-10 上做图像分类，但更深的问题是理解模型如何把像素逐层变成视觉特征，以及工程管线如何把这个模型变成稳定可用的训练工作流。这个页面真正要解决的，是让视觉训练过程变得可解释，而不是只追一个 accuracy 数字。</p>
+      </div>
+
       <div className="card mb-10">
         <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn / 你会学到什么</h2>
         <ul className="text-sm space-y-2 text-[var(--text-muted)]">
@@ -115,6 +125,14 @@ export default function CNNClassifierPage() {
           <div>
             <p className="font-semibold text-[var(--text-primary)]">Scheduler timing matters / 调度器时机非常关键</p>
             <p>OneCycleLR only works as intended if total steps match the actual training loop. Otherwise the learning-rate curve collapses too early.<br />只有当 OneCycleLR 的总 step 数与真实训练循环对齐时，它才会按设计工作，否则学习率曲线会过早崩塌。</p>
+          </div>
+          <div>
+            <p className="font-semibold text-[var(--text-primary)]">The residual block is the conceptual center / 残差块是这个项目的概念中心</p>
+            <p>The two-convolution path extracts features, while the shortcut preserves a clean optimization route. This is what lets deeper CNNs improve representational capacity without becoming dramatically harder to train.<br />双卷积路径负责提取特征，shortcut 则负责保留一条更干净的优化路径。也正因为如此，更深的 CNN 才能在增强表征能力的同时，不至于训练难度陡增。</p>
+          </div>
+          <div>
+            <p className="font-semibold text-[var(--text-primary)]">A real project includes export and sanity checks / 真正的项目必须包含导出与验证</p>
+            <p>Training success is not enough. Once you export the model, you need to verify that TorchScript or deployment inference still matches the original PyTorch behavior closely enough to trust. <br />训练成功还不够。模型一旦导出，你必须验证 TorchScript 或部署推理结果是否仍然和原始 PyTorch 行为足够一致，才能真正放心使用。</p>
           </div>
         </div>
       </div>

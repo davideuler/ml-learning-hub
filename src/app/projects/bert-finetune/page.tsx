@@ -54,6 +54,16 @@ export default function BertFinetunePage() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">{STATS.map(([k, v]) => <div key={k} className="card text-center py-3"><div className="text-sm text-[var(--text-muted)]">{k}</div><div className="font-bold text-[var(--text-primary)] mt-1">{v}</div></div>)}</div>
 
+      <div className="card mb-8">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Project Background / 项目背景</h2>
+        <p className="text-sm text-[var(--text-muted)] leading-relaxed">Fine-tuning BERT is one of the clearest ways to understand how pretrained language representations become useful task systems. It sits at the center of modern NLP practice, where you rarely pretrain from scratch but often need to adapt a general model to a narrow task efficiently. <br />微调 BERT 是理解“预训练语言表示如何变成可用任务系统”的最佳入口之一。它处在现代 NLP 实践的中心位置，因为现实里你很少从零预训练，但经常需要把通用模型高效适配到具体任务上。</p>
+      </div>
+
+      <div className="card mb-8">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Problem it solves / 它要解决什么问题</h2>
+        <p className="text-sm text-[var(--text-muted)] leading-relaxed">The immediate task is sentiment classification, but the deeper problem is how to adapt a pretrained transformer to a downstream objective without wasting memory, compute, or methodological rigor. This project turns that adaptation problem into something measurable by comparing full fine-tuning and LoRA directly. <br />表面任务是情感分类，但更深的问题是：如何把一个预训练 transformer 适配到下游任务，同时不浪费显存、算力和实验严谨性。这个项目通过直接比较全量微调和 LoRA，把这个“适配问题”变成可测量、可分析的工程问题。</p>
+      </div>
+
       <div className="card mb-10">
         <h2 className="font-bold text-[var(--text-primary)] mb-3">What you learn / 你会学到什么</h2>
         <ul className="text-sm space-y-2 text-[var(--text-muted)]">
@@ -87,6 +97,8 @@ model = get_peft_model(model, peft_config)`}</pre>
           <p><span className="font-semibold text-[var(--text-primary)]">LoRA changes update scope / LoRA 改变更新范围：</span> only low-rank adapters are trained, so memory drops a lot, but adaptation capacity also becomes more constrained. / LoRA 只训练低秩 adapter，所以显存占用会明显下降，但适应能力也更受约束。</p>
           <p><span className="font-semibold text-[var(--text-primary)]">Efficiency claims need discipline / 效率结论需要纪律：</span> if your tokenization, batch size, or warmup schedule changes between runs, your conclusion about PEFT is contaminated. / 如果不同实验之间 tokenizer、batch size 或 warmup 不一致，你关于 PEFT 的结论就被污染了。</p>
           <p><span className="font-semibold text-[var(--text-primary)]">Error analysis beats raw accuracy / 错误分析比只看精度更重要：</span> if the model fails consistently on negation, the architecture may be fine but the training setup still needs work. / 如果模型在否定句上持续失败，架构不一定有问题，训练设置才是重点。</p>
+          <p><span className="font-semibold text-[var(--text-primary)]">The adaptation boundary is the real design choice / 真正的设计选择在“适配边界”上：</span> full fine-tuning updates almost everything, while LoRA chooses a much narrower update surface. Understanding where that boundary sits is more important than memorizing PEFT buzzwords. / 全量微调几乎更新全部参数，而 LoRA 只选择更窄的更新表面。真正重要的是理解这个“适配边界”在哪里，而不是只记住几个 PEFT 名词。</p>
+          <p><span className="font-semibold text-[var(--text-primary)]">A fair benchmark needs identical scaffolding / 公平 benchmark 需要相同脚手架：</span> tokenizer, split logic, evaluation metric, and logging must stay aligned, or your conclusion about LoRA efficiency is mostly noise. / tokenizer、数据切分、评估指标和日志方式必须保持一致，否则你关于 LoRA 效率的结论大多只是噪声。</p>
         </div>
       </div>
 

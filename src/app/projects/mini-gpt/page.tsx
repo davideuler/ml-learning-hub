@@ -145,6 +145,16 @@ export default function MiniGPTPage() {
         ))}
       </div>
 
+      <div className="card mb-8">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Project Background / 项目背景</h2>
+        <p className="text-sm text-[var(--text-muted)] leading-relaxed">Mini-GPT is the bridge between reading transformer theory and actually owning the mechanics of autoregressive language modeling. Instead of treating GPT as a black box API, this project makes you build the moving parts yourself and see how modern LLM behavior emerges from simple components. <br />Mini-GPT 是连接“读懂 transformer 理论”和“真正掌握自回归语言模型机制”的桥梁。它不是把 GPT 当成黑盒 API 来用，而是让你亲手搭出核心部件，看到现代 LLM 的行为是如何从一组并不神秘的模块里涌现出来的。</p>
+      </div>
+
+      <div className="card mb-8">
+        <h2 className="font-bold text-[var(--text-primary)] mb-3">Problem it solves / 它要解决什么问题</h2>
+        <p className="text-sm text-[var(--text-muted)] leading-relaxed">The real problem is not “generate Shakespeare text.” The real problem is understanding how a model turns discrete tokens into contextual representations, prevents future leakage, and learns next-token prediction stably enough to produce coherent samples. This page turns that abstract systems question into something you can inspect line by line. <br />这个项目真正要解决的并不是“生成莎士比亚文本”，而是理解模型如何把离散 token 变成上下文化表示，如何阻止未来信息泄漏，以及如何稳定地学会 next-token prediction，最终生成连贯文本。它把一个抽象的系统问题，变成你可以逐行检查的实现。</p>
+      </div>
+
       <div className="card mb-10">
         <h2 className="font-bold text-[var(--text-primary)] mb-3">{COPY.en.learnTitle} / {COPY.zh.learnTitle}</h2>
         <ul className="text-sm space-y-3 text-[var(--text-muted)]">
@@ -186,6 +196,14 @@ class MiniGPT(nn.Module):
               <p>{COPY.zh.walkthrough[idx].body}</p>
             </div>
           ))}
+          <div>
+            <p className="font-semibold text-[var(--text-primary)]">The forward pass defines the whole learning contract / forward 过程定义了整个学习契约</p>
+            <p>The sequence idx enters token embeddings, receives positional information, flows through masked transformer blocks, and is finally projected into logits over the vocabulary. Every tensor shape in this path matters, because one silent mismatch is enough to make training unstable or generation nonsensical.<br />序列 idx 先进入 token embedding，再加入位置信息，流过带 mask 的 transformer block，最后投影回词表 logits。这个路径里每一个 tensor shape 都非常关键，因为任何一次静默 mismatch 都足以让训练变得不稳定，或者让生成结果失去意义。</p>
+          </div>
+          <div>
+            <p className="font-semibold text-[var(--text-primary)]">Training and sampling are two different regimes / 训练和采样是两种不同制度</p>
+            <p>During training, the model sees many teacher-forced prefixes and learns a probability distribution. During sampling, it must live with its own previous outputs. Understanding this train-infer gap is essential if you want to reason about why samples degrade, repeat, or drift off-topic.<br />训练时，模型会在 teacher forcing 条件下看到大量前缀并学习概率分布；采样时，它必须和自己的历史输出共处。理解这种 train-infer gap，是你分析生成退化、重复或跑题的关键。</p>
+          </div>
         </div>
       </div>
 
