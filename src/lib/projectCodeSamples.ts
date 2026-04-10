@@ -4,6 +4,8 @@ export type ProjectCodeSample = {
   language: 'python';
   filename: string;
   code: string;
+  dependencies: string[];
+  runCommands: string[];
 };
 
 export const PROJECT_CODE_SAMPLES: Record<string, ProjectCodeSample> = {
@@ -12,6 +14,8 @@ export const PROJECT_CODE_SAMPLES: Record<string, ProjectCodeSample> = {
     description: 'A compact PyTorch script that trains a tiny character-level GPT on a local text file.',
     language: 'python',
     filename: 'mini_gpt_train.py',
+    dependencies: ['python>=3.10', 'torch', 'input.txt (Tiny Shakespeare or another text corpus)'],
+    runCommands: ['pip install torch', 'python mini_gpt_train.py'],
     code: `import math
 import torch
 import torch.nn as nn
@@ -170,6 +174,8 @@ print(decode(model.generate(context, 300)[0].tolist()))
     description: 'A compact PyTorch script for training a ResNet-style classifier on CIFAR-10.',
     language: 'python',
     filename: 'cnn_cifar10_train.py',
+    dependencies: ['python>=3.10', 'torch', 'torchvision'],
+    runCommands: ['pip install torch torchvision', 'python cnn_cifar10_train.py'],
     code: `import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -273,6 +279,8 @@ for epoch in range(EPOCHS):
     description: 'A Hugging Face training script for SST-2 sentiment classification with optional LoRA.',
     language: 'python',
     filename: 'bert_sst2_train.py',
+    dependencies: ['python>=3.10', 'transformers', 'datasets', 'evaluate', 'torch', 'peft (optional for LoRA)'],
+    runCommands: ['pip install torch transformers datasets evaluate', 'pip install peft  # optional, only if USE_LORA=True', 'python bert_sst2_train.py'],
     code: `from datasets import load_dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
 import evaluate
@@ -335,6 +343,8 @@ print(trainer.evaluate())
     description: 'A compact Atari DQN training script with replay buffer, target network, and evaluation loop.',
     language: 'python',
     filename: 'dqn_pong_train.py',
+    dependencies: ['python>=3.10', 'torch', 'gymnasium[atari,accept-rom-license]', 'ale-py', 'numpy'],
+    runCommands: ['pip install torch numpy ale-py "gymnasium[atari,accept-rom-license]"', 'python dqn_pong_train.py'],
     code: `import random
 from collections import deque
 
@@ -448,6 +458,8 @@ for step in range(20000):
     description: 'A complete FastAPI inference service with health checks, validation, and simple metrics.',
     language: 'python',
     filename: 'inference_server.py',
+    dependencies: ['python>=3.10', 'fastapi', 'uvicorn', 'pydantic'],
+    runCommands: ['pip install fastapi uvicorn pydantic', 'uvicorn inference_server:app --host 0.0.0.0 --port 8000'],
     code: `from collections import Counter
 from contextlib import asynccontextmanager
 import time
@@ -513,6 +525,8 @@ def predict(req: PredictRequest):
     description: 'A compact PPO implementation for continuous control environments like HalfCheetah.',
     language: 'python',
     filename: 'ppo_continuous_train.py',
+    dependencies: ['python>=3.10', 'torch', 'gymnasium[mujoco]', 'numpy'],
+    runCommands: ['pip install torch numpy "gymnasium[mujoco]"', 'python ppo_continuous_train.py'],
     code: `import gymnasium as gym
 import numpy as np
 import torch
@@ -597,6 +611,8 @@ for episode in range(10):
     description: 'A minimal but complete Tianshou DQN training pipeline on CartPole-v1.',
     language: 'python',
     filename: 'tianshou_cartpole.py',
+    dependencies: ['python>=3.10', 'torch', 'tianshou', 'gymnasium', 'numpy'],
+    runCommands: ['pip install torch tianshou gymnasium numpy', 'python tianshou_cartpole.py'],
     code: `import gymnasium as gym
 import numpy as np
 import torch
