@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { BilingualText } from '@/components/common/BilingualText';
 
 export const metadata: Metadata = {
   title: 'Courses',
@@ -42,9 +43,14 @@ const COURSES = [
 export default function CoursesPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16">
-      <h1 className="text-4xl font-extrabold text-white mb-4">Courses</h1>
-      <p className="text-slate-400 mb-12 max-w-2xl">
-        Three tracks, each with video-style module breakdowns, code notebooks, and a capstone project.
+      <h1 className="text-4xl font-extrabold text-[var(--text-primary)] mb-4">
+        <BilingualText en="Courses" zh="课程体系" />
+      </h1>
+      <p className="text-[var(--text-muted)] mb-12 max-w-2xl">
+        <BilingualText
+          en="Three tracks, each with step-by-step modules, code notebooks, math foundations, and a capstone project."
+          zh="三条主线课程，每条都包含循序渐进的模块、代码实践、数学基础和压轴项目。"
+        />
       </p>
 
       <div className="grid md:grid-cols-3 gap-6">
@@ -53,13 +59,13 @@ export default function CoursesPage() {
                 className="card group flex flex-col gap-4 hover:no-underline">
             <span className="text-4xl">{c.icon}</span>
             <div className="flex items-start justify-between">
-              <h2 className="text-lg font-bold text-white group-hover:text-brand-300 transition-colors">
+              <h2 className="text-lg font-bold text-[var(--text-primary)] group-hover:text-brand-300 transition-colors">
                 {c.title}
               </h2>
               <span className={`badge ${c.badge} shrink-0 ml-2`}>{c.level}</span>
             </div>
-            <p className="text-slate-400 text-sm flex-1">{c.desc}</p>
-            <div className="flex gap-4 text-xs text-slate-500">
+            <p className="text-[var(--text-muted)] text-sm flex-1">{c.desc}</p>
+            <div className="flex gap-4 text-xs text-[var(--text-muted)]">
               <span>⏱ {c.hours}</span>
               <span>📦 {c.modules} modules</span>
             </div>
