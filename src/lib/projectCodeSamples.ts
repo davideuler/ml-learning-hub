@@ -6,6 +6,7 @@ export type ProjectCodeSample = {
   code: string;
   dependencies: string[];
   runCommands: string[];
+  fileTree: string[];
 };
 
 export const PROJECT_CODE_SAMPLES: Record<string, ProjectCodeSample> = {
@@ -16,6 +17,7 @@ export const PROJECT_CODE_SAMPLES: Record<string, ProjectCodeSample> = {
     filename: 'mini_gpt_train.py',
     dependencies: ['python>=3.10', 'torch', 'input.txt (Tiny Shakespeare or another text corpus)'],
     runCommands: ['pip install torch', 'python mini_gpt_train.py'],
+    fileTree: ['mini-gpt/', '├── input.txt', '├── mini_gpt_train.py', '└── outputs/', '    └── sample.txt'],
     code: `import math
 import torch
 import torch.nn as nn
@@ -176,6 +178,7 @@ print(decode(model.generate(context, 300)[0].tolist()))
     filename: 'cnn_cifar10_train.py',
     dependencies: ['python>=3.10', 'torch', 'torchvision'],
     runCommands: ['pip install torch torchvision', 'python cnn_cifar10_train.py'],
+    fileTree: ['cnn-classifier/', '├── cnn_cifar10_train.py', '├── data/', '│   └── cifar-10-batches-py/', '└── checkpoints/', '    └── best_model.pt'],
     code: `import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
@@ -281,6 +284,7 @@ for epoch in range(EPOCHS):
     filename: 'bert_sst2_train.py',
     dependencies: ['python>=3.10', 'transformers', 'datasets', 'evaluate', 'torch', 'peft (optional for LoRA)'],
     runCommands: ['pip install torch transformers datasets evaluate', 'pip install peft  # optional, only if USE_LORA=True', 'python bert_sst2_train.py'],
+    fileTree: ['bert-finetune/', '├── bert_sst2_train.py', '├── runs/', '│   └── bert-sst2/', '└── checkpoints/', '    └── epoch-1/'],
     code: `from datasets import load_dataset
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, TrainingArguments, Trainer
 import evaluate
@@ -345,6 +349,7 @@ print(trainer.evaluate())
     filename: 'dqn_pong_train.py',
     dependencies: ['python>=3.10', 'torch', 'gymnasium[atari,accept-rom-license]', 'ale-py', 'numpy'],
     runCommands: ['pip install torch numpy ale-py "gymnasium[atari,accept-rom-license]"', 'python dqn_pong_train.py'],
+    fileTree: ['dqn-pong/', '├── dqn_pong_train.py', '├── replay/', '│   └── buffer.cache', '└── videos/', '    └── eval_episode.mp4'],
     code: `import random
 from collections import deque
 
@@ -460,6 +465,7 @@ for step in range(20000):
     filename: 'inference_server.py',
     dependencies: ['python>=3.10', 'fastapi', 'uvicorn', 'pydantic'],
     runCommands: ['pip install fastapi uvicorn pydantic', 'uvicorn inference_server:app --host 0.0.0.0 --port 8000'],
+    fileTree: ['inference-server/', '├── inference_server.py', '├── tests/', '│   └── test_api.py', '└── logs/', '    └── requests.log'],
     code: `from collections import Counter
 from contextlib import asynccontextmanager
 import time
@@ -527,6 +533,7 @@ def predict(req: PredictRequest):
     filename: 'ppo_continuous_train.py',
     dependencies: ['python>=3.10', 'torch', 'gymnasium[mujoco]', 'numpy'],
     runCommands: ['pip install torch numpy "gymnasium[mujoco]"', 'python ppo_continuous_train.py'],
+    fileTree: ['ppo-mujoco/', '├── ppo_continuous_train.py', '├── videos/', '│   └── rollout.mp4', '└── checkpoints/', '    └── actor_critic.pt'],
     code: `import gymnasium as gym
 import numpy as np
 import torch
@@ -613,6 +620,7 @@ for episode in range(10):
     filename: 'tianshou_cartpole.py',
     dependencies: ['python>=3.10', 'torch', 'tianshou', 'gymnasium', 'numpy'],
     runCommands: ['pip install torch tianshou gymnasium numpy', 'python tianshou_cartpole.py'],
+    fileTree: ['tianshou-cartpole/', '├── tianshou_cartpole.py', '├── configs/', '│   └── dqn_cartpole.yaml', '└── logs/', '    └── train.log'],
     code: `import gymnasium as gym
 import numpy as np
 import torch

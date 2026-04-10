@@ -29,6 +29,10 @@ export function FullCodeSample({ projectSlug }: { projectSlug: keyof typeof PROJ
           </div>
         </div>
       </div>
+      <div className="mb-4">
+        <h3 className="font-semibold text-[var(--text-primary)] mb-2">File tree / 目录结构</h3>
+        <pre className="text-xs leading-relaxed overflow-x-auto rounded-xl p-4">{sample.fileTree.join('\n')}</pre>
+      </div>
       <pre className="text-xs leading-relaxed overflow-x-auto rounded-xl p-4">{sample.code}</pre>
     </div>
   );
