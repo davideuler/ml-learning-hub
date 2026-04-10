@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { FullCodeSample } from '@/components/projects/FullCodeSample';
 
 export const metadata: Metadata = { title: 'Project: FastAPI Inference Server' };
 
@@ -45,6 +46,8 @@ def predict(req: PredictRequest):
     return postprocess(y)`}</pre>
 
       <div className="card mb-8"><h2 className="font-bold text-[var(--text-primary)] mb-3">Code walkthrough / 代码要点解释</h2><div className="space-y-4 text-sm text-[var(--text-muted)]"><p><span className="font-semibold text-[var(--text-primary)]">The API function should stay thin / API 函数应该保持很薄：</span> your endpoint should mostly orchestrate validation, preprocessing, inference, and postprocessing, instead of hiding business logic inside the route. / 端点函数最好只负责协调校验、预处理、推理和后处理，而不是把业务逻辑全部塞进路由里。</p><p><span className="font-semibold text-[var(--text-primary)]">Validation is part of model safety / 校验是模型安全的一部分：</span> Pydantic is not decoration. It protects your service boundary from malformed inputs and makes error behavior predictable. / Pydantic 不是装饰，它是在服务边界保护系统免受脏输入影响，并让错误行为可预测。</p><p><span className="font-semibold text-[var(--text-primary)]">Serving is a systems problem / serving 本质上是系统问题：</span> model quality alone does not guarantee user experience. Queueing, batching, timeouts, and observability matter just as much. / 模型质量本身并不能保证用户体验，队列、batching、timeout 和可观测性同样关键。</p><p><span className="font-semibold text-[var(--text-primary)]">Instrumentation must be designed in from day one / 指标不能事后再补：</span> if you do not log latency, error rate, and request volume early, production debugging becomes guesswork. / 如果一开始不记录延迟、错误率和请求量，生产调试就会退化成猜测。</p></div></div>
+
+      <FullCodeSample projectSlug="inference-server" />
 
       <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Build Steps / 构建步骤</h2><div className="space-y-3 mb-8">{STEPS.map((s) => <div key={s.title} className="card"><h3 className="font-semibold text-[var(--text-primary)]">{s.title}</h3><p className="text-sm text-[var(--text-muted)] mt-1">{s.body}</p></div>)}</div>
       <div className="card mb-8"><h2 className="font-bold text-[var(--text-primary)] mb-3">Success Criteria / 完成标准</h2><ul className="text-sm space-y-2 text-[var(--text-muted)]"><li>✅ /health and /predict endpoints work / /health 与 /predict 可用</li><li>✅ Latency is measured under load / 能在压测下测量延迟</li><li>✅ At least one throughput optimization is demonstrated / 至少展示一种吞吐优化手段</li><li>✅ Logs and metrics are good enough to debug failures / 日志和指标足以支持故障排查</li></ul></div>

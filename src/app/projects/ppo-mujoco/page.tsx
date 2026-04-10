@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { FullCodeSample } from '@/components/projects/FullCodeSample';
 
 export const metadata: Metadata = {
   title: 'Project: PPO MuJoCo HalfCheetah',
@@ -39,6 +40,8 @@ policy_loss = -(torch.min(ratio * adv, clip_ratio * adv)).mean()
 value_loss = ((value - returns) ** 2).mean()`}</pre>
 
       <div className="card mb-8"><h2 className="font-bold text-[var(--text-primary)] mb-3">Code walkthrough / 代码要点解释</h2><div className="space-y-4 text-sm text-[var(--text-muted)]"><p><span className="font-semibold text-[var(--text-primary)]">The clipped objective defines PPO / clipped objective 定义了 PPO：</span> it constrains policy updates so the new policy cannot drift too far from the old one in a single optimization phase. / 它约束策略更新幅度，避免新策略在单次优化阶段里偏离旧策略太远。</p><p><span className="font-semibold text-[var(--text-primary)]">GAE is practical variance control / GAE 是实用型方差控制：</span> it is what makes PPO training much less noisy in practice. / 它让 PPO 在实践中显著减少训练噪声。</p><p><span className="font-semibold text-[var(--text-primary)]">Rollout storage is part of the algorithm / rollout 存储本身就是算法的一部分：</span> if trajectories, dones, or bootstrap values are assembled incorrectly, the loss may still run while learning silently collapses. / 如果轨迹、done 标志或 bootstrap value 拼错了，loss 可能照样能跑，但学习会静默崩塌。</p><p><span className="font-semibold text-[var(--text-primary)]">The Gaussian head is where continuous control becomes real / 高斯策略头是连续控制真正落地的地方：</span> unlike discrete policies, you must reason about means, log-stds, sampling noise, and entropy regularization. / 与离散策略不同，在这里你必须真正理解均值、log-std、采样噪声和 entropy regularization。</p></div></div>
+
+      <FullCodeSample projectSlug="ppo-mujoco" />
 
       <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Build Steps / 构建步骤</h2><div className="space-y-3 mb-8">{STEPS.map((s) => <div key={s.title} className="card"><h3 className="font-semibold text-[var(--text-primary)]">{s.title}</h3><p className="text-sm text-[var(--text-muted)] mt-1">{s.body}</p></div>)}</div>
       <div className="card mb-8"><h2 className="font-bold text-[var(--text-primary)] mb-3">Common Pitfalls / 常见坑</h2><ul className="text-sm space-y-2 text-[var(--text-muted)]"><li>▸ Advantage normalization omitted / 忘了做 advantage normalization</li><li>▸ Ratio clipping implemented incorrectly / ratio clipping 写错</li><li>▸ Mixing rollout and update phases / rollout 阶段和更新阶段混在一起</li><li>▸ Treating MuJoCo reward as instantly stable / 误以为 MuJoCo 奖励很快稳定</li></ul></div>

@@ -330,4 +330,330 @@ trainer.train()
 print(trainer.evaluate())
 `
   },
+  'dqn-pong': {
+    title: 'Runnable DQN Pong trainer',
+    description: 'A compact Atari DQN training script with replay buffer, target network, and evaluation loop.',
+    language: 'python',
+    filename: 'dqn_pong_train.py',
+    code: `import random
+from collections import deque
+
+import gymnasium as gym
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+
+
+def make_env():
+    env = gym.make('ALE/Pong-v5', frameskip=4)
+    env = gym.wrappers.AtariPreprocessing(env, grayscale_obs=True, scale_obs=False)
+    env = gym.wrappers.FrameStackObservation(env, 4)
+    return env
+
+
+class ReplayBuffer:
+    def __init__(self, capacity=100000):
+        self.buffer = deque(maxlen=capacity)
+
+    def push(self, *transition):
+        self.buffer.append(transition)
+
+    def sample(self, batch_size):
+        batch = random.sample(self.buffer, batch_size)
+        s, a, r, ns, d = zip(*batch)
+        return np.array(s), np.array(a), np.array(r), np.array(ns), np.array(d)
+
+    def __len__(self):
+        return len(self.buffer)
+
+
+class QNet(nn.Module):
+    def __init__(self, n_actions):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Conv2d(4, 32, 8, stride=4), nn.ReLU(),
+            nn.Conv2d(32, 64, 4, stride=2), nn.ReLU(),
+            nn.Conv2d(64, 64, 3, stride=1), nn.ReLU(),
+            nn.Flatten(),
+            nn.Linear(3136, 512), nn.ReLU(),
+            nn.Linear(512, n_actions),
+        )
+
+    def forward(self, x):
+        return self.net(x.float() / 255.0)
+
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+env = make_env()
+n_actions = env.action_space.n
+q_net = QNet(n_actions).to(device)
+target_net = QNet(n_actions).to(device)
+target_net.load_state_dict(q_net.state_dict())
+optimizer = torch.optim.Adam(q_net.parameters(), lr=1e-4)
+replay = ReplayBuffer()
+
+gamma = 0.99
+batch_size = 32
+warmup = 5000
+target_update = 1000
+epsilon_start, epsilon_end = 1.0, 0.05
+
+obs, _ = env.reset(seed=42)
+for step in range(20000):
+    epsilon = max(epsilon_end, epsilon_start - step / 100000)
+    if random.random() < epsilon:
+        action = env.action_space.sample()
+    else:
+        with torch.no_grad():
+            x = torch.tensor(np.array(obs), device=device).unsqueeze(0)
+            action = q_net(x).argmax(dim=1).item()
+
+    next_obs, reward, terminated, truncated, _ = env.step(action)
+    done = terminated or truncated
+    replay.push(np.array(obs), action, reward, np.array(next_obs), done)
+    obs = next_obs
+
+    if done:
+        obs, _ = env.reset()
+
+    if len(replay) < warmup:
+        continue
+
+    states, actions, rewards, next_states, dones = replay.sample(batch_size)
+    states = torch.tensor(states, device=device)
+    actions = torch.tensor(actions, device=device).long()
+    rewards = torch.tensor(rewards, device=device).float()
+    next_states = torch.tensor(next_states, device=device)
+    dones = torch.tensor(dones, device=device).float()
+
+    q_values = q_net(states).gather(1, actions.unsqueeze(1)).squeeze(1)
+    with torch.no_grad():
+        target_q = target_net(next_states).max(dim=1).values
+        targets = rewards + gamma * (1 - dones) * target_q
+
+    loss = F.smooth_l1_loss(q_values, targets)
+    optimizer.zero_grad(set_to_none=True)
+    loss.backward()
+    torch.nn.utils.clip_grad_norm_(q_net.parameters(), 10.0)
+    optimizer.step()
+
+    if step % target_update == 0:
+        target_net.load_state_dict(q_net.state_dict())
+        print(f'step={step} loss={loss.item():.4f} epsilon={epsilon:.3f}')
+`
+  },
+  'inference-server': {
+    title: 'Runnable FastAPI inference server',
+    description: 'A complete FastAPI inference service with health checks, validation, and simple metrics.',
+    language: 'python',
+    filename: 'inference_server.py',
+    code: `from collections import Counter
+from contextlib import asynccontextmanager
+import time
+
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
+
+
+class PredictRequest(BaseModel):
+    text: str = Field(min_length=1, max_length=2000)
+
+
+class PredictResponse(BaseModel):
+    label: str
+    score: float
+    latency_ms: float
+
+
+class DummySentimentModel:
+    def predict(self, text: str):
+        positive_words = {'good', 'great', 'love', 'excellent', 'amazing'}
+        tokens = text.lower().split()
+        score = sum(token in positive_words for token in tokens) / max(len(tokens), 1)
+        label = 'positive' if score >= 0.2 else 'negative'
+        return label, float(score)
+
+
+metrics = Counter()
+model = None
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global model
+    model = DummySentimentModel()
+    yield
+
+
+app = FastAPI(title='Inference Server Demo', lifespan=lifespan)
+
+
+@app.get('/health')
+def health():
+    return {'status': 'ok', 'model_loaded': model is not None}
+
+
+@app.get('/metrics')
+def get_metrics():
+    return dict(metrics)
+
+
+@app.post('/predict', response_model=PredictResponse)
+def predict(req: PredictRequest):
+    start = time.perf_counter()
+    label, score = model.predict(req.text)
+    latency_ms = (time.perf_counter() - start) * 1000
+    metrics['predict_requests_total'] += 1
+    return PredictResponse(label=label, score=score, latency_ms=latency_ms)
+`
+  },
+  'ppo-mujoco': {
+    title: 'Runnable PPO continuous-control trainer',
+    description: 'A compact PPO implementation for continuous control environments like HalfCheetah.',
+    language: 'python',
+    filename: 'ppo_continuous_train.py',
+    code: `import gymnasium as gym
+import numpy as np
+import torch
+import torch.nn as nn
+from torch.distributions import Normal
+
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+env = gym.make('HalfCheetah-v4')
+obs_dim = env.observation_space.shape[0]
+act_dim = env.action_space.shape[0]
+
+
+class ActorCritic(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.backbone = nn.Sequential(nn.Linear(obs_dim, 128), nn.Tanh(), nn.Linear(128, 128), nn.Tanh())
+        self.mu = nn.Linear(128, act_dim)
+        self.log_std = nn.Parameter(torch.zeros(act_dim))
+        self.value = nn.Linear(128, 1)
+
+    def forward(self, x):
+        h = self.backbone(x)
+        return self.mu(h), self.log_std.exp().expand_as(self.mu(h)), self.value(h)
+
+
+model = ActorCritic().to(device)
+optimizer = torch.optim.Adam(model.parameters(), lr=3e-4)
+clip_eps = 0.2
+gamma = 0.99
+lam = 0.95
+
+
+for episode in range(10):
+    obs, _ = env.reset(seed=episode)
+    traj = []
+    done = False
+    while not done:
+        x = torch.tensor(obs, dtype=torch.float32, device=device).unsqueeze(0)
+        mu, std, value = model(x)
+        dist = Normal(mu, std)
+        action = dist.sample()
+        logp = dist.log_prob(action).sum(dim=-1)
+        next_obs, reward, terminated, truncated, _ = env.step(action.squeeze(0).cpu().numpy())
+        traj.append((obs, action.squeeze(0).detach().cpu().numpy(), reward, value.item(), logp.item(), terminated or truncated))
+        obs = next_obs
+        done = terminated or truncated
+
+    rewards = [t[2] for t in traj]
+    values = [t[3] for t in traj] + [0.0]
+    advs, gae = [], 0.0
+    for t in reversed(range(len(traj))):
+        delta = rewards[t] + gamma * values[t + 1] * (1 - traj[t][5]) - values[t]
+        gae = delta + gamma * lam * (1 - traj[t][5]) * gae
+        advs.insert(0, gae)
+    returns = [a + v for a, v in zip(advs, values[:-1])]
+
+    obs_t = torch.tensor(np.array([t[0] for t in traj]), dtype=torch.float32, device=device)
+    act_t = torch.tensor(np.array([t[1] for t in traj]), dtype=torch.float32, device=device)
+    old_logp = torch.tensor([t[4] for t in traj], dtype=torch.float32, device=device)
+    adv_t = torch.tensor(advs, dtype=torch.float32, device=device)
+    ret_t = torch.tensor(returns, dtype=torch.float32, device=device)
+    adv_t = (adv_t - adv_t.mean()) / (adv_t.std() + 1e-8)
+
+    mu, std, values_pred = model(obs_t)
+    dist = Normal(mu, std)
+    new_logp = dist.log_prob(act_t).sum(dim=-1)
+    ratio = torch.exp(new_logp - old_logp)
+    clipped = torch.clamp(ratio, 1 - clip_eps, 1 + clip_eps)
+    policy_loss = -(torch.min(ratio * adv_t, clipped * adv_t)).mean()
+    value_loss = ((values_pred.squeeze(-1) - ret_t) ** 2).mean()
+    loss = policy_loss + 0.5 * value_loss
+
+    optimizer.zero_grad(set_to_none=True)
+    loss.backward()
+    optimizer.step()
+    print(f'episode={episode} return={sum(rewards):.1f} loss={loss.item():.4f}')
+`
+  },
+  'tianshou-cartpole': {
+    title: 'Runnable Tianshou CartPole pipeline',
+    description: 'A minimal but complete Tianshou DQN training pipeline on CartPole-v1.',
+    language: 'python',
+    filename: 'tianshou_cartpole.py',
+    code: `import gymnasium as gym
+import numpy as np
+import torch
+import torch.nn as nn
+from tianshou.data import Collector, VectorReplayBuffer
+from tianshou.env import DummyVectorEnv
+from tianshou.policy import DQNPolicy
+from tianshou.trainer import offpolicy_trainer
+
+
+train_envs = DummyVectorEnv([lambda: gym.make('CartPole-v1') for _ in range(4)])
+test_envs = DummyVectorEnv([lambda: gym.make('CartPole-v1') for _ in range(4)])
+state_shape = train_envs.observation_space.shape or train_envs.observation_space.n
+action_shape = train_envs.action_space.n
+
+
+class Net(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.model = nn.Sequential(
+            nn.Linear(state_shape[0], 128), nn.ReLU(),
+            nn.Linear(128, 128), nn.ReLU(),
+            nn.Linear(128, action_shape),
+        )
+
+    def forward(self, obs, state=None, info=None):
+        if not isinstance(obs, torch.Tensor):
+            obs = torch.tensor(obs, dtype=torch.float32)
+        return self.model(obs), state
+
+
+net = Net()
+optim = torch.optim.Adam(net.parameters(), lr=1e-3)
+policy = DQNPolicy(
+    model=net,
+    optim=optim,
+    discount_factor=0.99,
+    estimation_step=3,
+    target_update_freq=320,
+)
+
+train_collector = Collector(policy, train_envs, VectorReplayBuffer(20000, len(train_envs)))
+test_collector = Collector(policy, test_envs)
+train_collector.collect(n_step=1024)
+
+result = offpolicy_trainer(
+    policy,
+    train_collector,
+    test_collector,
+    max_epoch=5,
+    step_per_epoch=2000,
+    step_per_collect=10,
+    episode_per_test=5,
+    batch_size=64,
+    update_per_step=0.1,
+)
+print(result)
+`
+  },
 };

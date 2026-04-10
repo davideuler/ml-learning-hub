@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { FullCodeSample } from '@/components/projects/FullCodeSample';
 
 export const metadata: Metadata = {
   title: 'Project: Tianshou CartPole Pipeline',
@@ -42,6 +43,8 @@ export default function TianshouCartPolePage() {
 )`}</pre>
 
       <div className="card mb-8"><h2 className="font-bold text-[var(--text-primary)] mb-3">Code walkthrough / 代码要点解释</h2><div className="space-y-4 text-sm text-[var(--text-muted)]"><p><span className="font-semibold text-[var(--text-primary)]">Abstraction is the main lesson / abstraction 才是核心 lesson：</span> Tianshou hides boilerplate, but you still need to understand what flows through each abstraction or you will not know how to debug. / Tianshou 会隐藏大量样板代码，但如果你不知道每层 abstraction 里流动的是什么，训练失败时就没法 debug。</p><p><span className="font-semibold text-[var(--text-primary)]">Frameworks change what you optimize for / 框架改变你的优化重心：</span> instead of hand-writing loops, you spend more effort on experiment design, metrics, and reproducibility. / 你不再花大量时间手写循环，而是把精力更多放在实验设计、指标和可复现性上。</p><p><span className="font-semibold text-[var(--text-primary)]">Policy, collector, and trainer own different responsibilities / policy、collector、trainer 各管一摊：</span> the policy decides actions and learning logic, the collector interacts with environments, and the trainer coordinates the overall schedule. / policy 负责动作和学习逻辑，collector 负责和环境交互，trainer 负责总调度。把三者分清，框架才不会变成黑盒。</p><p><span className="font-semibold text-[var(--text-primary)]">The goal is reusable experimentation / 目标是可复用实验：</span> the real win is not shorter code, it is being able to swap seeds, environments, and configs without rewriting infrastructure. / 真正的收益不只是代码更短，而是你可以切换 seed、环境和配置，而不用重写基础设施。</p></div></div>
+
+      <FullCodeSample projectSlug="tianshou-cartpole" />
 
       <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Build Steps / 构建步骤</h2><div className="space-y-3 mb-8">{STEPS.map((s) => <div key={s.title} className="card"><h3 className="font-semibold text-[var(--text-primary)]">{s.title}</h3><p className="text-sm text-[var(--text-muted)] mt-1">{s.body}</p></div>)}</div>
       <div className="card mb-8"><h2 className="font-bold text-[var(--text-primary)] mb-3">Common Pitfalls / 常见坑</h2><ul className="text-sm space-y-2 text-[var(--text-muted)]"><li>▸ Using the framework without understanding transitions / 只会调用框架，不理解 transition 流动</li><li>▸ Wrong env seed handling / 环境 seed 处理错误</li><li>▸ Confusing trainer metrics with true evaluation / 把 trainer 指标误当成真实评估</li><li>▸ Reusing configs without checking hidden defaults / 复用配置时忽略隐藏默认值</li></ul></div>

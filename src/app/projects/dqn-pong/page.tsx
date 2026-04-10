@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { FullCodeSample } from '@/components/projects/FullCodeSample';
 
 export const metadata: Metadata = {
   title: 'Project: DQN Atari Pong',
@@ -100,6 +101,8 @@ export default function DQNPongPage() {
           <p><span className="font-semibold text-[var(--text-primary)]">Evaluation must be separated from exploration / 评估必须与探索解耦：</span> if epsilon stays high during evaluation, you are mostly measuring noise rather than learned control. / 如果评估时 epsilon 仍然很高，你测到的基本只是噪声，而不是学到的控制能力。</p>
         </div>
       </div>
+
+      <FullCodeSample projectSlug="dqn-pong" />
 
       <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">Build Steps / 构建步骤</h2>
       <div className="space-y-3 mb-8">{STEPS.map((s) => <div key={s.title} className="card"><h3 className="font-semibold text-[var(--text-primary)]">{s.title}</h3><p className="text-sm text-[var(--text-muted)] mt-1">{s.body}</p></div>)}</div>
